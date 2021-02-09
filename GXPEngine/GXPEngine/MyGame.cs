@@ -13,7 +13,7 @@ public class MyGame : Game
 
 	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-
+        LoadMap("map.tmx");
         player = new Player();
         AddChild(player);
         camera = new Camera(0, 0, 800, 600);
@@ -23,6 +23,18 @@ public class MyGame : Game
     void Update()
 	{
 	}
+    void LoadMap(string filename) //LoadMap function, add colliders to layers in Tiled
+    {
+        TiledLoader loader = new TiledLoader(filename);
+        //Layer without collider
+        loader.addColliders = false;
+        loader.LoadTileLayers(0);
+        //Layer with collider
+        loader.addColliders = true;
+        loader.LoadTileLayers(1);
+
+    }
+
 
     static void Main()							// Main() is the first method that's called when the program is run
 	{
