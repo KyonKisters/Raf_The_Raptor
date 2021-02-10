@@ -9,16 +9,12 @@ using TiledMapParser;
 
 public class Enemy : AnimationSprite
     {
-        float speed=1;
+        float speed=2f;
         Player player;
         Boolean hitarea;
-        Enemy enemy;
-<<<<<<< HEAD
         float distX;
         float distY;
         float distance;
-=======
->>>>>>> enemy
 
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
         {
@@ -29,80 +25,61 @@ public class Enemy : AnimationSprite
             HitArea();
             Movement();
             OnCollision(this);
-<<<<<<< HEAD
-        }
-    void HitArea()
-        {
-        distX = game.FindObjectOfType(typeof(Player)).x - this.x;
-        distY = game.FindObjectOfType(typeof(Player)).y - this.y;
-        distance = Mathf.Sqrt(distX * distX + distY * distY);
-        if (distance < 200)
-        {
-            hitarea = true;
-=======
 
     }
     void HitArea()
         {
-            if (DistanceTo(player) < 200)
+            distX = game.FindObjectOfType(typeof(Player)).x - this.x;
+            distY = game.FindObjectOfType(typeof(Player)).y - this.y;
+            distance = Mathf.Sqrt(distX * distX + distY * distY);
+            if (distance < 300)
             {
                 hitarea = true;
-            }
-            else hitarea = false;
->>>>>>> enemy
-        }
-        else hitarea = false;
-    }
 
+            }
+        }
     void Movement()
-        {
-<<<<<<< HEAD
+    {
+        float moveX = 0;
+        float moveY = 0;
 
         if (hitarea)
+        {
+            if (this.x > game.FindObjectOfType(typeof(Player)).x)
             {
-                if (this.x > game.FindObjectOfType(typeof(Player)).x)
-                {
-                    Move(-speed, 0);
-                }
-                if (this.x < game.FindObjectOfType(typeof(Player)).x)
-                {
-                    Move(speed, 0);
-                }
-                if (this.y > game.FindObjectOfType(typeof(Player)).y)
-                {
-                    Move(0, -speed);
-                }
-                if (this.y < game.FindObjectOfType(typeof(Player)).y)
-=======
-        Console.WriteLine(player.x);
-        if (hitarea)
+                moveX = -speed;
+                moveY = 0;
+            }
+            if (this.x < game.FindObjectOfType(typeof(Player)).x)
             {
-                if (this.x > player.x)
+                moveX = speed;
+                moveY = 0;
+            }
+            if (this.y > game.FindObjectOfType(typeof(Player)).y)
+            {
+                moveX = 0;
+                moveY = -speed;
+            }
+            if (this.y < game.FindObjectOfType(typeof(Player)).y)
+            {
+                moveX = 0;
+                moveY = speed;
+            }
+            //if (this.y < game.FindObjectOfType(typeof(Player)).y)
+            //    Console.WriteLine(player.x);
+        }
+        Collision collision = MoveUntilCollision(moveX, moveY);
+
+
+    }
+            void OnCollision(GameObject other)
+            {
+                if (other is Player)
                 {
-                    Move(-speed, 0);
+                    speed = 0;
                 }
-                if (this.x < player.x)
-                {
-                    Move(speed, 0);
-                }
-                if (this.y > player.y)
-                {
-                    Move(0, -speed);
-                }
-                if (this.y < player.y)
->>>>>>> enemy
-                {
-                    Move(0, speed);
-                }
+                else speed = 2f;
+
             }
         }
-    void OnCollision(GameObject other)
-    {
-        if (other is Player)
-        {
-            speed = 0;
-        } else speed = 1;
-
-    }
-    }
 

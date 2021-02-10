@@ -19,12 +19,9 @@ public class MyGame : Game
         AddChild(player);
         camera = new Camera(0, 0, 800, 600);
         player.AddChild(camera);
-<<<<<<< HEAD
         //enemy = new Enemy();
-=======
         //enemy = new Enemy(player);
         //AddChild(enemy);
->>>>>>> enemy
     }
 
     void Update()
@@ -42,10 +39,6 @@ public class MyGame : Game
         //Object layer connect with classes 
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
-<<<<<<< HEAD
-        
-=======
->>>>>>> enemy
     }
 
 
