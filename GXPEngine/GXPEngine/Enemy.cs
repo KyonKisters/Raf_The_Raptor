@@ -11,6 +11,8 @@ public class Enemy : AnimationSprite
 {
     float speed = 2f;
     Player player;
+    int attacktimer;
+    bool attack = false;
     EAAProjectile projectile = new EAAProjectile();
 
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
@@ -31,15 +33,26 @@ public class Enemy : AnimationSprite
     #region Attacks
     void Attack()
     {
-        float rndnumber;
-        bool attack = false;
-        Random rnd = new Random();
-        rndnumber = rnd.Next(0,100);
-        attack = rndnumber < 50 ? false : true;
-        if (attack & HitArea(200))
+        if (HitArea(200))
         {
-            AddChild(projectile);
+            attacktimer++;
+            if (attacktimer > 50)
+            {
+      
+                Random rnd = new Random();
+                float rndnumber = rnd.Next(0, 100);
+                attack = rndnumber < 75 ? true : false;
+                attacktimer = 0;
+
+                if (attack)
+                {
+                    AddChild(projectile);
+                    attack = false;
+                }
+                Console.WriteLine(attack);
+            }
         }
+
     }
     #endregion
     //----------------------------------------------------------------------------------------
