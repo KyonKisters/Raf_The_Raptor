@@ -13,7 +13,6 @@ public class Enemy : AnimationSprite
     Player player;
     int attacktimer;
     bool attack = false;
-    EAAProjectile projectile = new EAAProjectile();
 
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
@@ -38,18 +37,20 @@ public class Enemy : AnimationSprite
             attacktimer++;
             if (attacktimer > 50)
             {
-      
+            
                 Random rnd = new Random();
                 float rndnumber = rnd.Next(0, 100);
-                attack = rndnumber < 75 ? true : false;
-                attacktimer = 0;
+                attack = rndnumber < 25 ? true : false;
 
+                Console.WriteLine(attack);
                 if (attack)
                 {
+                    EAAProjectile projectile = new EAAProjectile();
                     AddChild(projectile);
                     attack = false;
                 }
-                Console.WriteLine(attack);
+                attacktimer = 0;
+
             }
         }
 

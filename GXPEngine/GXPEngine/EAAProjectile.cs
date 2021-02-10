@@ -7,13 +7,19 @@ namespace GXPEngine
 {
     public class EAAProjectile : Sprite
     {
+        int lifetime;
         public EAAProjectile() : base("EAAhitbox.png") 
         { 
        
         }
         void Update()
         {
-            x++;
+            x+=5;
+            lifetime++;
+            if (lifetime > 50)
+            {
+                LateDestroy();
+            }
         }
     }
 }
