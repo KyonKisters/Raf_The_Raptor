@@ -6,7 +6,7 @@ using GXPEngine;
 using GXPEngine.Core;
 public class Player : Sprite
 {
-    float speed = 2f;
+    float speed = 4f;
 
     public Player() : base("player.png")
     {
