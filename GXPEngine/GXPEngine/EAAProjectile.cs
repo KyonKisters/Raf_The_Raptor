@@ -9,14 +9,14 @@ namespace GXPEngine
     {
         int lifetime;
         public EAAProjectile() : base("EAAhitbox.png") 
-        { 
-       
+        {
+            SetOrigin(width / 2, height / 2);
         }
         void Update()
         {
-            x+=5;
+            x+=20;
             lifetime++;
-            if (lifetime > 50)
+            if (lifetime > 2)
             {
                 LateDestroy();
             }

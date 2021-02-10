@@ -23,6 +23,13 @@ public class Player : Sprite
         Movement();
         Attack();
     }
+    //----------------------------------------------------------------------------------------
+    //                                        Movement
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Movement of the player
+    /// </summary>
+    #region Movement
     void Movement()
     {
         float moveX = 0;
@@ -53,6 +60,14 @@ public class Player : Sprite
         //    OnCollision(collision.other);
         //}
     }
+    #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Attacks
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Attacks of the player
+    /// </summary>
+    #region Attack
     void Attack()
     {
         attacktimer++;
@@ -67,6 +82,6 @@ public class Player : Sprite
             attacktimer = 0;
             attack = true;
         }
-  
     }
+    #endregion
 }
