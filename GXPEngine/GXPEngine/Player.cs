@@ -13,6 +13,7 @@ public class Player : Sprite
     {
         x = 800 / 2;
         y = 600 / 2;
+        SetOrigin(width/2,height/2);
     }
 
     void Update()
