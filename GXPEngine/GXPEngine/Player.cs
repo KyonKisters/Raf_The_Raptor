@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
+using TiledMapParser;
 public class Player : Sprite
 {
     float speed = 4f;
@@ -12,9 +13,21 @@ public class Player : Sprite
     {
         x = 800 / 2;
         y = 600 / 2;
+        SetOrigin(width / 2, height / 2);
     }
 
     void Update()
+    {
+        Movement();
+    }
+    //----------------------------------------------------------------------------------------
+    //                                         Movement
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Movement of the player
+    /// </summary>
+    #region Movement
+    void Movement()
     {
         float moveX = 0;
         float moveY = 0;
@@ -43,6 +56,8 @@ public class Player : Sprite
         //{
         //    OnCollision(collision.other);
         //}
-
     }
+    #endregion
+
+
 }
