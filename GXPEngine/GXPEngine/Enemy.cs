@@ -13,6 +13,9 @@ public class Enemy : AnimationSprite
         Player player;
         Boolean hitarea;
         Enemy enemy;
+        float distX;
+        float distY;
+        float distance;
 
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
         {
@@ -23,35 +26,37 @@ public class Enemy : AnimationSprite
             HitArea();
             Movement();
             OnCollision(this);
-
-    }
+        }
     void HitArea()
         {
-            if (DistanceTo(player) < 200)
-            {
-                hitarea = true;
-            }
-            else hitarea = false;
-        }
-
-        void Movement()
+        distX = game.FindObjectOfType(typeof(Player)).x - this.x;
+        distY = game.FindObjectOfType(typeof(Player)).y - this.y;
+        distance = Mathf.Sqrt(distX * distX + distY * distY);
+        if (distance < 200)
         {
-        Console.WriteLine(player.x);
+            hitarea = true;
+        }
+        else hitarea = false;
+    }
+
+    void Movement()
+        {
+
         if (hitarea)
             {
-                if (this.x > player.x)
+                if (this.x > game.FindObjectOfType(typeof(Player)).x)
                 {
                     Move(-speed, 0);
                 }
-                if (this.x < player.x)
+                if (this.x < game.FindObjectOfType(typeof(Player)).x)
                 {
                     Move(speed, 0);
                 }
-                if (this.y > player.y)
+                if (this.y > game.FindObjectOfType(typeof(Player)).y)
                 {
                     Move(0, -speed);
                 }
-                if (this.y < player.y)
+                if (this.y < game.FindObjectOfType(typeof(Player)).y)
                 {
                     Move(0, speed);
                 }
