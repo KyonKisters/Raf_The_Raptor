@@ -10,6 +10,7 @@ public class MyGame : Game
 {
     Player player;
     Camera camera;
+    Enemy enemy;
 
 	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
@@ -18,6 +19,8 @@ public class MyGame : Game
         AddChild(player);
         camera = new Camera(0, 0, 800, 600);
         player.AddChild(camera);
+        enemy = new Enemy(player);
+        AddChild(enemy);
     }
 
     void Update()
