@@ -1,37 +1,42 @@
 using System;									// System contains a lot of default C# libraries 
 using System.Drawing;                           // System.Drawing contains a library used for canvas drawing below
 using GXPEngine;								// GXPEngine contains the engine
+using TiledMapParser;
+//Cleaning up code = CTRL + K + D
+//Commenting = CTRL + K + C
+//Uncommenting = CTRL + K + U
 
 public class MyGame : Game
 {
+    Player player;
+    Camera camera;
+
 	public MyGame() : base(800, 600, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        //----------------------------------------------------example-code----------------------------
-        //create a canvas
-        Canvas canvas = new Canvas(800, 600);
-
-        //add some content
-        canvas.graphics.FillRectangle(new SolidBrush(Color.Red), new Rectangle(0, 0, 400, 300));
-        canvas.graphics.FillRectangle(new SolidBrush(Color.Blue), new Rectangle(400, 0, 400, 300));
-        canvas.graphics.FillRectangle(new SolidBrush(Color.Yellow), new Rectangle(0, 300, 400, 300));
-        canvas.graphics.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(400, 300, 400, 300));
-
-        //add canvas to display list
-        AddChild(canvas);
-        //------------------------------------------------end-of-example-code-------------------------
+        LoadMap("map.tmx");
+        player = new Player();
+        AddChild(player);
+        camera = new Camera(0, 0, 800, 600);
+        player.AddChild(camera);
     }
 
     void Update()
 	{
-		//----------------------------------------------------example-code----------------------------
-		if (Input.GetKeyDown(Key.SPACE)) // When space is pressed...
-		{
-			new Sound("ping.wav").Play(); // ...play a sound
-		}
-		//------------------------------------------------end-of-example-code-------------------------
 	}
+    void LoadMap(string filename) //LoadMap function, add colliders to layers in Tiled
+    {
+        TiledLoader loader = new TiledLoader(filename);
+        //Layer without collider
+        loader.addColliders = false;
+        loader.LoadTileLayers(0);
+        //Layer with collider
+        loader.addColliders = true;
+        loader.LoadTileLayers(1);
 
-	static void Main()							// Main() is the first method that's called when the program is run
+    }
+
+
+    static void Main()							// Main() is the first method that's called when the program is run
 	{
 		new MyGame().Start();					// Create a "MyGame" and start it
 	}
