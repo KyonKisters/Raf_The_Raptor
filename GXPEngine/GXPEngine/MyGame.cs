@@ -19,8 +19,8 @@ public class MyGame : Game
         AddChild(player);
         camera = new Camera(0, 0, 800, 600);
         player.AddChild(camera);
-        enemy = new Enemy(player);
-        AddChild(enemy);
+        //enemy = new Enemy(player);
+        //AddChild(enemy);
     }
 
     void Update()
@@ -35,7 +35,9 @@ public class MyGame : Game
         //Layer with collider
         loader.addColliders = true;
         loader.LoadTileLayers(1);
-
+        //Object layer connect with classes 
+        loader.autoInstance = true;
+        loader.LoadObjectGroups(0);
     }
 
 

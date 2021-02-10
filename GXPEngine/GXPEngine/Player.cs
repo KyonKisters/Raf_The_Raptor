@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
+using TiledMapParser;
 public class Player : Sprite
 {
     float speed = 4f;
