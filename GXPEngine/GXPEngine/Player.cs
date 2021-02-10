@@ -8,6 +8,8 @@ using TiledMapParser;
 public class Player : Sprite
 {
     float speed = 4f;
+    int attacktimer = 0;
+    bool attack;
 
     public Player() : base("player.png")
     {
@@ -17,6 +19,11 @@ public class Player : Sprite
     }
 
     void Update()
+    {
+        Movement();
+        Attack();
+    }
+    void Movement()
     {
         float moveX = 0;
         float moveY = 0;
@@ -45,6 +52,21 @@ public class Player : Sprite
         //{
         //    OnCollision(collision.other);
         //}
-
+    }
+    void Attack()
+    {
+        attacktimer++;
+        if (Input.GetKey(Key.E) & attack)
+        {
+            EAAProjectile projectile = new EAAProjectile();
+            AddChild(projectile);
+            attack = false;
+        }
+        if (attacktimer >50)
+        {
+            attacktimer = 0;
+            attack = true;
+        }
+  
     }
 }
