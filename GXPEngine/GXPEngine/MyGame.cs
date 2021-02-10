@@ -19,14 +19,18 @@ public class MyGame : Game
         AddChild(player);
         camera = new Camera(0, 0, 800, 600);
         player.AddChild(camera);
-        //enemy = new Enemy();
-        //enemy = new Enemy(player);
-        //AddChild(enemy);
     }
 
     void Update()
 	{
 	}
+    //----------------------------------------------------------------------------------------
+    //                                         Load Tiledmap
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Loading all parts of a Tiled map
+    /// </summary>
+    #region load Tiledmap
     void LoadMap(string filename) //LoadMap function, add colliders to layers in Tiled
     {
         TiledLoader loader = new TiledLoader(filename);
@@ -40,7 +44,7 @@ public class MyGame : Game
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
     }
-
+    #endregion
 
     static void Main()							// Main() is the first method that's called when the program is run
 	{
