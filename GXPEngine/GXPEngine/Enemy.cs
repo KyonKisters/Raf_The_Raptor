@@ -2,52 +2,68 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GXPEngine.Core;
+using GXPEngine;
+using TiledMapParser;
 
-namespace GXPEngine
-{
-    class Enemy : Sprite
+
+public class Enemy : AnimationSprite
     {
         float speed=1;
         Player player;
-        public Enemy(Player _player) : base("enemy.png")
+        Boolean hitarea;
+        Enemy enemy;
+
+    public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
         {
             SetXY(game.width - 200, game.height / 2);
-            player = _player;
         }
         void Update()
         {
             HitArea();
             Movement();
-            StopWalk();
-        }
-        void HitArea()
-        {
-          
+            OnCollision(this);
 
+    }
+    void HitArea()
+        {
+            if (DistanceTo(player) < 200)
+            {
+                hitarea = true;
+            }
+            else hitarea = false;
         }
 
         void Movement()
         {
-            if (this.x > player.x)
+        Console.WriteLine(player.x);
+        if (hitarea)
             {
-                Move(-speed,0);
-            }
-            if (this.x < player.x)
-            {
-                Move(speed, 0);
-            }
-            if (this.y > player.y)
-            {
-                Move(0, -speed);
-            }
-            if (this.y < player.y)
-            {
-                Move(0, speed);
+                if (this.x > player.x)
+                {
+                    Move(-speed, 0);
+                }
+                if (this.x < player.x)
+                {
+                    Move(speed, 0);
+                }
+                if (this.y > player.y)
+                {
+                    Move(0, -speed);
+                }
+                if (this.y < player.y)
+                {
+                    Move(0, speed);
+                }
             }
         }
-        void StopWalk()
+    void OnCollision(GameObject other)
+    {
+        if (other is Player)
         {
+            speed = 0;
+        } else speed = 1;
 
-        }
     }
-}
+    }
+
