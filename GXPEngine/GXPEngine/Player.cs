@@ -66,24 +66,31 @@ public class Player : Sprite
     }
     void OnCollision(GameObject other)
     {
+        float moveX = 0;
+        float moveY = 0;
         if (other is Enemy)
         {
             if (this.x > game.FindObjectOfType(typeof(Enemy)).x)
             {
-                this.x = this.x + 10;
+                moveX = moveX + 10;
             }
             if (this.x < game.FindObjectOfType(typeof(Enemy)).x)
             {
-                this.x = this.x - 10;
+                moveX = moveX - 10;
             }
             if (this.y > game.FindObjectOfType(typeof(Enemy)).y)
             {
-                this.y = this.y + 10;
+                moveY = moveY + 10;
             }
             if (this.y < game.FindObjectOfType(typeof(Enemy)).y)
             {
-                this.y = this.y - 10;
+                moveY = moveY - 10;
             }
+        }
+        Collision collision = MoveUntilCollision(moveX, moveY); //You can move until collision, for example with Tiled Map
+        if (collision != null)
+        {
+            OnCollision(collision.other);
         }
     }
 
