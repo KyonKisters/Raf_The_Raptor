@@ -7,9 +7,11 @@ using GXPEngine.Core;
 using TiledMapParser;
 public class Player : Sprite
 {
+    Enemy enemy;
     float speed = 4f;
     int attacktimer = 0;
     bool attack;
+
 
     public Player() : base("player.png")
     {
@@ -30,10 +32,12 @@ public class Player : Sprite
     /// Movement of the player
     /// </summary>
     #region Movement
+
     void Movement()
     {
         float moveX = 0;
         float moveY = 0;
+
         if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT))
         {
             moveX = -speed;
@@ -55,11 +59,34 @@ public class Player : Sprite
             moveY = speed;
         }
         Collision collision = MoveUntilCollision(moveX, moveY); //You can move until collision, for example with Tiled Map
-        //if (collision != null)
-        //{
-        //    OnCollision(collision.other);
-        //}
+        if (collision != null)
+        {
+            OnCollision(collision.other);
+        }
     }
+    void OnCollision(GameObject other)
+    {
+        if (other is Enemy)
+        {
+            if (this.x > game.FindObjectOfType(typeof(Enemy)).x)
+            {
+                this.x = this.x + 10;
+            }
+            if (this.x < game.FindObjectOfType(typeof(Enemy)).x)
+            {
+                this.x = this.x - 10;
+            }
+            if (this.y > game.FindObjectOfType(typeof(Enemy)).y)
+            {
+                this.y = this.y + 10;
+            }
+            if (this.y < game.FindObjectOfType(typeof(Enemy)).y)
+            {
+                this.y = this.y - 10;
+            }
+        }
+    }
+
     #endregion
     //----------------------------------------------------------------------------------------
     //                                        Attacks
@@ -83,5 +110,6 @@ public class Player : Sprite
             attack = true;
         }
     }
+
     #endregion
 }
