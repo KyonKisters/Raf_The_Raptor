@@ -139,6 +139,7 @@ namespace GXPEngine
 		/// </summary>
 		public GameObject parent {
 			get { return _parent; }
+
 			set { 
 				bool wasActive = InHierarchy ();
 				if (_parent != null) {
@@ -159,6 +160,7 @@ namespace GXPEngine
 					Subscribe ();
 				}
 			}
+
 		}
 
 		//------------------------------------------------------------------------------------------------------------------------

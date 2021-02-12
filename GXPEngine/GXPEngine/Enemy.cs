@@ -9,19 +9,28 @@ using TiledMapParser;
 
 public class Enemy : AnimationSprite
 {
-    float speed = 2f;
-    Player player;
+    public float speed = 1f;
     int attacktimer;
-    bool attack = false;
+    public bool attack = false;
+    public float health;
+    string facing;
+    MyGame _game;
 
+    //----------------------------------------------------------------------------------------
+    //                                        Constructor
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Constructor of the Enemy
+    /// </summary>
+    #region Constructor
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
         SetXY(game.width - 200, game.height / 2);
     }
-    void Update()
+    #endregion
+    public void createGame(MyGame game)
     {
-        Movement();
-        Attack();
+        this._game = game;
     }
     //----------------------------------------------------------------------------------------
     //                                        Attacks
@@ -30,9 +39,9 @@ public class Enemy : AnimationSprite
     /// Attacks of the enemy
     /// </summary>
     #region Attacks
-    void Attack()
+    public void Attack()
     {
-        if (HitArea(200))
+        if (HitArea(300))
         {
             attacktimer++;
             if (attacktimer > 50)
@@ -42,11 +51,10 @@ public class Enemy : AnimationSprite
                 float rndnumber = rnd.Next(0, 100);
                 attack = rndnumber < 25 ? true : false;
 
-                Console.WriteLine(attack);
+
                 if (attack)
                 {
-                    EAAProjectile projectile = new EAAProjectile();
-                    AddChild(projectile);
+                    _game.Attack(facing,this.x,this.y);
                     attack = false;
                 }
                 attacktimer = 0;
@@ -63,7 +71,7 @@ public class Enemy : AnimationSprite
     /// Triggers when ever an object enters and this object will follow
     /// </summary>
     #region HitArea
-    bool HitArea(float distance)
+    public bool HitArea(float distance)
     {
         Boolean hitarea;
         float distX = game.FindObjectOfType(typeof(Player)).x - this.x;
@@ -86,38 +94,62 @@ public class Enemy : AnimationSprite
     /// Movement of the object
     /// </summary>
     #region Movement
-    void Movement()
+    public void Movement()
     {
         float moveX = 0;
         float moveY = 0;
-        if (HitArea(200))
+        if (HitArea(300))
         {
+
             if (this.x > game.FindObjectOfType(typeof(Player)).x)
             {
+                facing = "LEFT";
                 moveX = -speed;
                 moveY = 0;
             }
             if (this.x < game.FindObjectOfType(typeof(Player)).x)
             {
+                facing = "RIGHT";
                 moveX = speed;
                 moveY = 0;
             }
             if (this.y > game.FindObjectOfType(typeof(Player)).y)
             {
+                facing = "TOP";
                 moveX = 0;
                 moveY = -speed;
             }
             if (this.y < game.FindObjectOfType(typeof(Player)).y)
             {
+                facing = "DOWN";
                 moveX = 0;
                 moveY = speed;
             }
-            //if (this.y < game.FindObjectOfType(typeof(Player)).y)
-            //    Console.WriteLine(player.x);
         }
         Collision collision = MoveUntilCollision(moveX, moveY);
+        if (collision != null)
+        {
+            handleCollision(collision);
+        }
     }
     #endregion
+    //----------------------------------------------------------------------------------------
+    //                                         Collision
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Collision of the enemy
+    /// </summary>
+    #region Collision
+    public void handleCollision(Collision col)
+    {
+        Console.WriteLine(col.other.name);
+    }
+    #endregion
+    void Update()
+    {
+        Movement();
+        Attack();
+    }
 }
 
 

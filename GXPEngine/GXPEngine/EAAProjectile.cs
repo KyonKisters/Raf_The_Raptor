@@ -7,39 +7,92 @@ namespace GXPEngine
 {
     public class EAAProjectile : Sprite
     {
-        int lifetime;
-        Player player;
-        Enemy enemy;
-        public EAAProjectile() : base("EAAhitbox.png") 
+        string facing;
+        float speed = 5;
+        //----------------------------------------------------------------------------------------
+        //                                        Constructor
+        //----------------------------------------------------------------------------------------
+        /// <summary>
+        /// Constructor of the Projectile
+        /// </summary>
+       #region Constructor
+        public EAAProjectile(string facing, float x, float y) : base("EAAhitbox.png") 
         {
             SetOrigin(width / 2, height / 2);
+            this.facing = facing;
+            this.x = x;
+            this.y = y;
+
+            if (this.facing == "TOP")
+            {
+                this.y -=24;
+            }
+            if (this.facing == "DOWN")
+            {
+                this.y += 24;
+            }
+            if (this.facing == "RIGHT")
+            {
+                this.x += 24;
+            }
+            if (this.facing == "LEFT")
+            {
+                this.x -= 24;
+            }
         }
-        void Update()
+        #endregion
+        //----------------------------------------------------------------------------------------
+        //                                        Movement
+        //----------------------------------------------------------------------------------------
+        /// <summary>
+        /// Movement of the Projectile
+        /// </summary>
+        #region Movement 
+        void Movement()
         {
             float moveX = 0;
             float moveY = 0;
             //x += 20;
-            if (game.FindObjectOfType(typeof(Enemy)).x < game.FindObjectOfType(typeof(Player)).x)
+
+            if (facing == "LEFT")
             {
-                moveX -=5;
+                moveX -= speed;
             }
-            if (game.FindObjectOfType(typeof(Enemy)).x > game.FindObjectOfType(typeof(Player)).x)
+
+            if (facing == "RIGHT")
             {
-                moveX +=5;
+                moveX += speed;
             }
-            if (game.FindObjectOfType(typeof(Enemy)).y < game.FindObjectOfType(typeof(Player)).y)
+            if (facing == "TOP")
             {
-                moveY -=5;
+                moveY -= speed;
             }
-            if (game.FindObjectOfType(typeof(Enemy)).y > game.FindObjectOfType(typeof(Player)).y)
+            if (facing == "DOWN")
             {
-                moveY +=5;
+                moveY += speed;
             }
             Collision collision = MoveUntilCollision(moveX, moveY);
             if (collision != null)
             {
-                LateDestroy();
+                handleCollision(collision);
             }
+        }
+        #endregion
+        //----------------------------------------------------------------------------------------
+        //                                        Collision
+        //----------------------------------------------------------------------------------------
+        /// <summary>
+        /// Collision of the Projectile
+        /// </summary>
+        #region Collision
+        void handleCollision(Collision col)
+        {
+            LateDestroy();
+        }
+        #endregion
+        void Update()
+        {
+            Movement();
         }
     }
 }

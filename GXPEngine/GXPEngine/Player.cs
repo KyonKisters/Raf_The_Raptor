@@ -7,23 +7,31 @@ using GXPEngine.Core;
 using TiledMapParser;
 public class Player : Sprite
 {
-    Enemy enemy;
     float speed = 4f;
     int attacktimer = 0;
     bool attack;
+    string facing;
+    MyGame _game;
 
-
+    public enum Direction { TOP, DOWN, RIGHT, LEFT };
+    public Direction Facing;
+    //----------------------------------------------------------------------------------------
+    //                                        Constructor
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Constructor of the player
+    /// </summary>
+    #region Constructor
     public Player() : base("player.png")
     {
         x = 800 / 2;
         y = 600 / 2;
-        SetOrigin(width/2,height/2);
+        SetOrigin(width / 2, height / 2);
     }
-
-    void Update()
+    #endregion
+    public void createGame(MyGame _game)
     {
-        Movement();
-        Attack();
+        this._game = _game;
     }
     //----------------------------------------------------------------------------------------
     //                                        Movement
@@ -40,60 +48,47 @@ public class Player : Sprite
 
         if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT))
         {
+            Facing = Direction.LEFT;
             moveX = -speed;
             moveY = 0;
         }
         if (Input.GetKey(Key.D) || Input.GetKey(Key.RIGHT))
         {
+            Facing = Direction.RIGHT;
             moveX = speed;
             moveY = 0;
         }
         if (Input.GetKey(Key.W) || Input.GetKey(Key.UP))
         {
+            Facing = Direction.TOP;
             moveX = 0;
             moveY = -speed;
         }
         if (Input.GetKey(Key.S) || Input.GetKey(Key.DOWN))
         {
+            Facing = Direction.DOWN;
             moveX = 0;
             moveY = speed;
         }
         Collision collision = MoveUntilCollision(moveX, moveY); //You can move until collision, for example with Tiled Map
         if (collision != null)
         {
-            OnCollision(collision.other);
+            handleCollision(collision);
         }
     }
-    void OnCollision(GameObject other)
-    {
-        float moveX = 0;
-        float moveY = 0;
-        if (other is Enemy)
-        {
-            if (this.x > game.FindObjectOfType(typeof(Enemy)).x)
-            {
-                moveX = moveX + 10;
-            }
-            if (this.x < game.FindObjectOfType(typeof(Enemy)).x)
-            {
-                moveX = moveX - 10;
-            }
-            if (this.y > game.FindObjectOfType(typeof(Enemy)).y)
-            {
-                moveY = moveY + 10;
-            }
-            if (this.y < game.FindObjectOfType(typeof(Enemy)).y)
-            {
-                moveY = moveY - 10;
-            }
-        }
-        Collision collision = MoveUntilCollision(moveX, moveY); //You can move until collision, for example with Tiled Map
-        if (collision != null)
-        {
-            OnCollision(collision.other);
-        }
-    }
+    #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Collision
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Collision of the player
+    /// </summary>
+    #region Collision
 
+    void handleCollision(Collision col)
+    {
+        Console.WriteLine(this.name);
+    }
     #endregion
     //----------------------------------------------------------------------------------------
     //                                        Attacks
@@ -107,11 +102,11 @@ public class Player : Sprite
         attacktimer++;
         if (Input.GetKey(Key.E) & attack)
         {
-            EAAProjectile projectile = new EAAProjectile();
-            AddChild(projectile);
+            facing = Facing.ToString();
+            _game.Attack(facing, this.x, this.y);
             attack = false;
         }
-        if (attacktimer >50)
+        if (attacktimer > 50)
         {
             attacktimer = 0;
             attack = true;
@@ -119,4 +114,9 @@ public class Player : Sprite
     }
 
     #endregion
+    void Update()
+    {
+        Movement();
+        Attack();
+    }
 }
