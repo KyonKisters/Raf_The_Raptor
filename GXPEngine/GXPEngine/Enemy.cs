@@ -142,7 +142,6 @@ public class Enemy : AnimationSprite
     #region Collision
     public void handleCollision(Collision col)
     {
-        Console.WriteLine(col.other.name);
     }
     #endregion
     void Update()

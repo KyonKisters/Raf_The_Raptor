@@ -87,7 +87,7 @@ public class Player : Sprite
 
     void handleCollision(Collision col)
     {
-        Console.WriteLine(this.name);
+        Console.WriteLine(col.other.name);
     }
     #endregion
     //----------------------------------------------------------------------------------------
