@@ -12,9 +12,12 @@ public class Tunnel : AnimationSprite
 
         public Tunnel(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
         { 
-        
+
         }
 
+    void OnCollision()
+    { 
 
+    }
 
     }

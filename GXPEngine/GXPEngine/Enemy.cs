@@ -14,9 +14,8 @@ public class Enemy : AnimationSprite
     public bool attack = false;
     public float health;
     string facing;
-    MyGame _game;
+    Level level;
     Player player;
-    private int ID;
 
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -28,8 +27,6 @@ public class Enemy : AnimationSprite
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
         SetXY(game.width - 200, game.height / 2);
-        this.ID = obj.ID;
-        Console.WriteLine("this is my ID " + ID);
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -39,9 +36,9 @@ public class Enemy : AnimationSprite
     /// Instances of other classes
     /// </summary>
     #region Instances
-    public void createGame(MyGame game)
+    public void createGame(Level level)
     {
-        this._game = game;
+        this.level = level;
     }
     public void createPlayer(Player player)
     {
@@ -70,7 +67,7 @@ public class Enemy : AnimationSprite
 
                 if (attack)
                 {
-                    _game.Attack(facing,this.x,this.y);
+                    level.Attack(facing,this.x,this.y);
                     attack = false;
                 }
                 attacktimer = 0;
@@ -157,6 +154,7 @@ public class Enemy : AnimationSprite
     #region Collision
     public void handleCollision(Collision col)
     {
+
     }
     #endregion
     void Update()

@@ -3,43 +3,80 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
-using TiledMapParser;
 using GXPEngine.Core;
+using TiledMapParser;
 
 
-public class Level : GameObject
-{
-    private Player _player;
-    private int _mapWidth;
-    private int _mapHeight;
-    public Level(string pLevelFilename) : base(false)
+    public class Level : GameObject
     {
-        createLevel(pLevelFilename);
-    }
-    void createLevel(string pLevelFilename)
-    {
-        TiledLoader tileloader = new TiledLoader(pLevelFilename);
-
-        for (int i = 0; i <tileloader.NumTileLayers;i++)
+    Player player;
+    Enemy enemy;
+    MyGame _game;
+    Camera camera;
+    EAAProjectile projectile;
+    //----------------------------------------------------------------------------------------
+    //                                        Constructor
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Constructor of the Game
+    /// </summary>
+    #region Constructor
+    public Level(string filename, MyGame game) : base (false)
         {
-            //Console.WriteLine(tileloader.map.Layers[i].Name);
-            tileloader.addColliders = i == (tileloader.NumTileLayers - 1);
-            tileloader.LoadTileLayers(i);
-        }
+        createLevel(filename);
+        this._game = game;
 
-        tileloader.autoInstance = true;
-        tileloader.LoadObjectGroups();
+        player = new Player();
+        player.createGame(this);
+        AddChild(player);
+        this.enemy.createPlayer(player);
 
-        _player = game.FindObjectOfType<Player>();
-
-        _mapWidth = tileloader.map.Width * tileloader.map.TileWidth;
-        _mapHeight = tileloader.map.Height * tileloader.map.TileHeight;
-
+        camera = new Camera(0, 0, 800, 600);
+        player.AddChild(camera);
     }
-
-    void Update()
+    #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Create Level
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Create level
+    /// </summary>
+    #region Create Level
+    void createLevel(string filename)
     {
-        game.x = Mathf.Clamp(-_player.x + game.width / 2, -_mapWidth - game.width, 0);
-        game.y = Mathf.Clamp(-_player.y + game.height / 2, -_mapHeight - game.height, 0);
+        TiledLoader loader = new TiledLoader(filename);
+        loader.OnObjectCreated += Loader_OnObjectCreated;
+
+        //Layer without collider
+        loader.addColliders = false;
+        loader.LoadTileLayers(0);
+        //Layer with collider
+        loader.addColliders = true;
+        loader.LoadTileLayers(1);
+        //Object layer connect with classes 
+        loader.autoInstance = true;
+        loader.LoadObjectGroups(0);
     }
+    private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
+    {
+        if (sprite is Enemy enemy)
+        {
+            this.enemy = enemy;
+            this.enemy.createGame(this);
+        }
+    }
+    #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Create Projectiles
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Creates the projectiles so that this Game is the parent
+    /// </summary>
+    #region create projectiles
+    public void Attack(string facing, float x, float y)
+    {
+        projectile = new EAAProjectile(facing, x, y);
+        AddChild(projectile);
+    }
+    #endregion
 }

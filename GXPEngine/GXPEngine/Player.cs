@@ -11,7 +11,7 @@ public class Player : Sprite
     int attacktimer = 0;
     bool attack;
     string facing;
-    MyGame _game;
+    Level level;
 
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
@@ -36,9 +36,9 @@ public class Player : Sprite
     /// Instances of other classes
     /// </summary>
     #region Instances
-    public void createGame(MyGame _game)
+    public void createGame(Level level)
     {
-        this._game = _game;
+        this.level = level;
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -96,6 +96,10 @@ public class Player : Sprite
     void handleCollision(Collision col)
     {
         Console.WriteLine(col.other.name);
+        //if (col is Tunnel) 
+        //{
+        //    level.LoadLevel("Level1.tmx");
+        //}
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -111,7 +115,7 @@ public class Player : Sprite
         if (Input.GetKey(Key.E) & attack)
         {
             facing = Facing.ToString();
-            _game.Attack(facing, this.x, this.y);
+            level.Attack(facing, this.x, this.y);
             attack = false;
         }
         if (attacktimer > 50)
