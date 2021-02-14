@@ -15,6 +15,8 @@ public class Enemy : AnimationSprite
     public float health;
     string facing;
     MyGame _game;
+    Player player;
+    private int ID;
 
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -26,12 +28,26 @@ public class Enemy : AnimationSprite
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
         SetXY(game.width - 200, game.height / 2);
+        this.ID = obj.ID;
+        Console.WriteLine("this is my ID " + ID);
     }
     #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Instances
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Instances of other classes
+    /// </summary>
+    #region Instances
     public void createGame(MyGame game)
     {
         this._game = game;
     }
+    public void createPlayer(Player player)
+    {
+        this.player = player;
+    }
+    #endregion
     //----------------------------------------------------------------------------------------
     //                                        Attacks
     //----------------------------------------------------------------------------------------
@@ -74,8 +90,8 @@ public class Enemy : AnimationSprite
     public bool HitArea(float distance)
     {
         Boolean hitarea;
-        float distX = game.FindObjectOfType(typeof(Player)).x - this.x;
-        float distY = game.FindObjectOfType(typeof(Player)).y - this.y;
+        float distX = player.x - this.x;
+        float distY = player.y - this.y;
         float DistBetwThisAndObj = Mathf.Sqrt(distX * distX + distY * distY);
 
         if (DistBetwThisAndObj < distance)
@@ -100,26 +116,25 @@ public class Enemy : AnimationSprite
         float moveY = 0;
         if (HitArea(300))
         {
-
-            if (this.x > game.FindObjectOfType(typeof(Player)).x)
+            if (this.x > player.x)
             {
                 facing = "LEFT";
                 moveX = -speed;
                 moveY = 0;
             }
-            if (this.x < game.FindObjectOfType(typeof(Player)).x)
+            if (this.x < player.x)
             {
                 facing = "RIGHT";
                 moveX = speed;
                 moveY = 0;
             }
-            if (this.y > game.FindObjectOfType(typeof(Player)).y)
+            if (this.y > player.y)
             {
                 facing = "TOP";
                 moveX = 0;
                 moveY = -speed;
             }
-            if (this.y < game.FindObjectOfType(typeof(Player)).y)
+            if (this.y < player.y)
             {
                 facing = "DOWN";
                 moveX = 0;

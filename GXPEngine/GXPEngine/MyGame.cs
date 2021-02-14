@@ -22,16 +22,14 @@ public class MyGame : Game
     #region Constructor
     public MyGame() : base(800, 600, false)     // Create a window that's 800x600 and NOT fullscreen
     {
-        LoadMap("map.tmx");
+        LoadMap("Level2.tmx");
         player = new Player();
         player.createGame(this);
         AddChild(player);
+        this.enemy.createPlayer(player);
 
         camera = new Camera(0, 0, 800, 600);
         player.AddChild(camera);
-        //enemy = new Enemy();
-        //enemy = new Enemy(player);
-        //AddChild(enemy);
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -55,7 +53,6 @@ public class MyGame : Game
         //Object layer connect with classes 
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
-
     }
 
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
@@ -83,9 +80,5 @@ public class MyGame : Game
     static void Main()                          // Main() is the first method that's called when the program is run
     {
         new MyGame().Start();                   // Create a "MyGame" and start it
-    }
-    void Update()
-    {
-
     }
 }
