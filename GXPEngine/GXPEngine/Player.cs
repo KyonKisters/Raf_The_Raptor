@@ -5,7 +5,9 @@ using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
 using TiledMapParser;
-public class Player : Sprite
+
+
+public class Player : AnimationSprite
 {
     float speed = 4f;
     int attacktimer = 0;
@@ -13,9 +15,8 @@ public class Player : Sprite
     string facing;
     Level level;
     MyGame _game;
-    string currentLevel;
     int levelnumber;
-
+    bool change;
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
     //----------------------------------------------------------------------------------------
@@ -25,14 +26,8 @@ public class Player : Sprite
     /// Constructor of the player
     /// </summary>
     #region Constructor
-    public Player(MyGame game, string currentLevel,int levelnumber) : base("player.png")
+    public Player(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
-        x = 800 / 2;
-        y = 600 / 2;
-        this._game = game;
-        this.currentLevel = currentLevel;
-        this.levelnumber = levelnumber;
-
         SetOrigin(width / 2, height / 2);
     }
     #endregion
@@ -43,9 +38,17 @@ public class Player : Sprite
     /// Instances of other classes
     /// </summary>
     #region Instances
-    public void createGame(Level level)
+    public void createLevelInst(Level level)
     {
         this.level = level;
+    }
+    public void createGameInst(MyGame game)
+    {
+        this._game = game;
+    }
+    public void giveLevelNumber(int levelnumber)
+    {
+        this.levelnumber = levelnumber;
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -60,7 +63,7 @@ public class Player : Sprite
     {
         float moveX = 0;
         float moveY = 0;
-
+        
         if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT))
         {
             Facing = Direction.LEFT;
@@ -105,9 +108,22 @@ public class Player : Sprite
         Console.WriteLine(col.other.name);
         if (col.other is Tunnel)
         {
-            levelnumber++;
-            _game.LoadLevel("Level" + levelnumber + ".tmx",levelnumber);
+            if (levelnumber <= 3 && !change)
+            {
+                levelnumber++;
+            }
 
+            if (levelnumber == 4)
+            {
+                change = true;
+            }
+
+            if (change)
+            {
+                levelnumber = 1;
+            }
+            _game.LoadLevel("Level" + levelnumber + ".tmx",levelnumber);
+            
         }
     }
     #endregion

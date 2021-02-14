@@ -15,9 +15,4 @@ public class Tunnel : AnimationSprite
 
         }
 
-    void OnCollision()
-    { 
-
-    }
-
     }

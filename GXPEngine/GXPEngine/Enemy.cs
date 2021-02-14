@@ -36,7 +36,7 @@ public class Enemy : AnimationSprite
     /// Instances of other classes
     /// </summary>
     #region Instances
-    public void createGame(Level level)
+    public void createLevelInst(Level level)
     {
         this.level = level;
     }

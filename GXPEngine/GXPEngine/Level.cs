@@ -11,9 +11,10 @@ using TiledMapParser;
     {
     Player player;
     Enemy enemy;
-    MyGame _game;
     Camera camera;
     EAAProjectile projectile;
+    MyGame _game;
+    int levelNumber;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -23,21 +24,9 @@ using TiledMapParser;
     #region Constructor
     public Level(string filename, MyGame game,int levelnumber) : base (false)
         {
-
+        _game = game;
+        this.levelNumber = levelnumber;
         createLevel(filename);
-        this._game = game;
-
-        string currentLevel = filename;
-
-        player = new Player(game,currentLevel,levelnumber);
-        player.createGame(this);
-
-        AddChild(player);
-        this.enemy.createPlayer(player);
-
-
-        camera = new Camera(0, 0, 800, 600);
-        player.AddChild(camera);
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -61,13 +50,24 @@ using TiledMapParser;
         //Object layer connect with classes 
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
+
+        enemy.createPlayer(player);
     }
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
     {
+        if (sprite is Player player)
+        {
+            this.player = player;
+            this.player.createLevelInst(this);
+            this.player.createGameInst(_game);
+            this.player.giveLevelNumber(levelNumber);
+            camera = new Camera(0, 0, 800, 600);
+            this.player.AddChild(camera);
+        }
         if (sprite is Enemy enemy)
         {
             this.enemy = enemy;
-            this.enemy.createGame(this);
+            this.enemy.createLevelInst(this);
         }
     }
     #endregion
