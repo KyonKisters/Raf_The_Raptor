@@ -10,6 +10,7 @@ using TiledMapParser;
 public class MyGame : Game
 {
     Level level;
+    int levelnumber = 1;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -19,10 +20,21 @@ public class MyGame : Game
     #region Constructor
     public MyGame() : base(800, 600, false)     // Create a window that's 800x600 and NOT fullscreen
     {
-        level = new Level("Level2.tmx", this);
+        level = new Level("Level1.tmx", this,levelnumber);
         AddChild(level);
     }
     #endregion
+    public void LoadLevel(string filename,int levelnumber)
+    {
+        Game.main.GetChildren().ForEach(DestroyGame);
+        level = new Level(filename, this,levelnumber);
+        AddChild(level);
+    }
+    void DestroyGame(GameObject other)
+    {
+        other.LateRemove();
+        other.LateDestroy();
+    }
     static void Main()                          // Main() is the first method that's called when the program is run
     {
         new MyGame().Start();                   // Create a "MyGame" and start it

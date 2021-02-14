@@ -21,15 +21,20 @@ using TiledMapParser;
     /// Constructor of the Game
     /// </summary>
     #region Constructor
-    public Level(string filename, MyGame game) : base (false)
+    public Level(string filename, MyGame game,int levelnumber) : base (false)
         {
+
         createLevel(filename);
         this._game = game;
 
-        player = new Player();
+        string currentLevel = filename;
+
+        player = new Player(game,currentLevel,levelnumber);
         player.createGame(this);
+
         AddChild(player);
         this.enemy.createPlayer(player);
+
 
         camera = new Camera(0, 0, 800, 600);
         player.AddChild(camera);

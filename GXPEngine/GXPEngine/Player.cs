@@ -12,6 +12,9 @@ public class Player : Sprite
     bool attack;
     string facing;
     Level level;
+    MyGame _game;
+    string currentLevel;
+    int levelnumber;
 
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
@@ -22,10 +25,14 @@ public class Player : Sprite
     /// Constructor of the player
     /// </summary>
     #region Constructor
-    public Player() : base("player.png")
+    public Player(MyGame game, string currentLevel,int levelnumber) : base("player.png")
     {
         x = 800 / 2;
         y = 600 / 2;
+        this._game = game;
+        this.currentLevel = currentLevel;
+        this.levelnumber = levelnumber;
+
         SetOrigin(width / 2, height / 2);
     }
     #endregion
@@ -96,10 +103,12 @@ public class Player : Sprite
     void handleCollision(Collision col)
     {
         Console.WriteLine(col.other.name);
-        //if (col is Tunnel) 
-        //{
-        //    level.LoadLevel("Level1.tmx");
-        //}
+        if (col.other is Tunnel)
+        {
+            levelnumber++;
+            _game.LoadLevel("Level" + levelnumber + ".tmx",levelnumber);
+
+        }
     }
     #endregion
     //----------------------------------------------------------------------------------------
