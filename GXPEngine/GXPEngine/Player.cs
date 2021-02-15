@@ -124,7 +124,7 @@ public class Player : AnimationSprite
             {
                 levelnumber = 1;
             }
-            _game.LoadLevel("Level" + levelnumber + ".tmx",levelnumber);
+            _game.LoadLevel("Level" + levelnumber + ".tmx", levelnumber);
         }
         if (col.other is SmallMeat)
         {
@@ -160,9 +160,28 @@ public class Player : AnimationSprite
     }
 
     #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        DugHole
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Dugs a hole in front thats not passable
+    /// </summary>
+    #region Dug hole
+    void dugHole()
+    {
+        if (Input.GetKey(Key.Q))
+        {
+            facing = Facing.ToString();
+            level.dugHoles(facing, this.x, this.y);
+        }
+    }
+
+
+    #endregion
     void Update()
     {
         Movement();
         Attack();
+        dugHole();
     }
 }

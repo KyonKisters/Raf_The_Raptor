@@ -14,6 +14,7 @@ using TiledMapParser;
     Camera camera;
     EAAProjectile projectile;
     MyGame _game;
+    DugHole dughole;
     int levelNumber;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -86,6 +87,11 @@ using TiledMapParser;
     {
         projectile = new EAAProjectile(facing, x, y,player,enemy);
         AddChild(projectile);
+    }
+    public void dugHoles(string facing, float x, float y)
+    {
+        dughole = new DugHole(facing, x, y, player,this);
+        AddChild(dughole);
     }
     #endregion
 }
