@@ -29,7 +29,7 @@ public class Enemy : AnimationSprite
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
         SetOrigin(this.width/2,this.height/2);
-        triggerBox.scale = this.distance/4;
+        triggerBox.scale = this.distance/40;
         AddChild(triggerBox);
         
     }
