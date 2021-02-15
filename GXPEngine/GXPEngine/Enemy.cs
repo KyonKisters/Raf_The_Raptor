@@ -25,7 +25,6 @@ public class Enemy : AnimationSprite
     /// </summary>
     #region Constructor
     public Enemy(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
-
     {
         SetXY(game.width - 200, game.height / 2);
     }
@@ -56,25 +55,6 @@ public class Enemy : AnimationSprite
     public void Attack()
     {
         if (HitArea(300))
-
-        {
-            SetXY(game.width - 200, game.height / 2);
-        
-        }
-        void Update()
-        {
-            HitArea();
-            Movement();
-            OnCollision(this);
-        }
-    //----------------------------------------------------------------------------------------
-    //                                         Trigger Area
-    //----------------------------------------------------------------------------------------
-    /// <summary>
-    /// Triggers when ever an object enters and this object will follow
-    /// </summary>
-    #region HitArea
-    void HitArea()
         {
             attacktimer++;
             if (attacktimer > 50)
@@ -118,9 +98,6 @@ public class Enemy : AnimationSprite
         else hitarea = false;
 
         return hitarea;
-                hitarea = true;
-            }else hitarea = false;
-
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -135,11 +112,6 @@ public class Enemy : AnimationSprite
         float moveX = 0;
         float moveY = 0;
         if (HitArea(300))
-    void Movement()
-    {
-        float moveX = 0;
-        float moveY = 0;
-        if (hitarea)
         {
             if (this.x > player.x)
             {
@@ -192,22 +164,5 @@ public class Enemy : AnimationSprite
     }
 }
 
-    }
-    #endregion
-    //----------------------------------------------------------------------------------------
-    //                                         Collision
-    //----------------------------------------------------------------------------------------
-    /// <summary>
-    /// Movement of the object
-    /// </summary>
-    #region Collision
-    void OnCollision(GameObject other)
-     {
-        if (other is Player)
-         {
-            speed = 0;
-         }else speed = 2f;
-     }
-    #endregion
 
 

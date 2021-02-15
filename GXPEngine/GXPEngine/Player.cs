@@ -6,12 +6,6 @@ using GXPEngine;
 using GXPEngine.Core;
 using TiledMapParser;
 
-    public Player() : base("player.png")
-    {
-        x = 800 / 2;
-        y = 600 / 2;
-        SetOrigin(width / 2, height / 2);
-    }
 
 public class Player : AnimationSprite
 {
@@ -63,10 +57,6 @@ public class Player : AnimationSprite
     #endregion
     //----------------------------------------------------------------------------------------
     //                                        Movement
-        Movement();
-    }
-    //----------------------------------------------------------------------------------------
-    //                                         Movement
     //----------------------------------------------------------------------------------------
     /// <summary>
     /// Movement of the player
@@ -81,9 +71,6 @@ public class Player : AnimationSprite
             timer = 0;
             cantDigAHole = false;
             }
-        float moveX = 0;
-    void Movement()
-    {
         float moveX = 0;
         float moveY = 0;
         if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT))
@@ -211,12 +198,4 @@ public class Player : AnimationSprite
         Attack();
         dugHole();
     }
-        //if (collision != null)
-        //{
-        //    OnCollision(collision.other);
-        //}
-    }
-    #endregion
-
-
 }
