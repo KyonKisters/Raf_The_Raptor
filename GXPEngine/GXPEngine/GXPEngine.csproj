@@ -84,6 +84,7 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="smallMeat.cs" />
+    <Compile Include="TriggerBox.cs" />
     <Compile Include="Tunnel.cs" />
   </ItemGroup>
 </Project>
