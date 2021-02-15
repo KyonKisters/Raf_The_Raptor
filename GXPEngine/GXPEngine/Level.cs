@@ -15,6 +15,7 @@ using TiledMapParser;
     EAAProjectile projectile;
     MyGame _game;
     DugHole dughole;
+    Check check;
     int levelNumber;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -30,6 +31,7 @@ using TiledMapParser;
         this.levelNumber = levelnumber;
 
         createLevel(filename);
+        AddChild(check);
 
     }
     #endregion
@@ -45,6 +47,7 @@ using TiledMapParser;
         TiledLoader loader = new TiledLoader(filename);
         loader.OnObjectCreated += Loader_OnObjectCreated;
 
+        Console.WriteLine();
         //Layer without collider
         loader.addColliders = false;
         loader.LoadTileLayers(0);
@@ -54,9 +57,9 @@ using TiledMapParser;
         //Object layer connect with classes 
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
-
-        enemy.createPlayer(player);
         
+        enemy.createPlayer(player);
+        check = new Check(player);
     }
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
     {
@@ -90,8 +93,12 @@ using TiledMapParser;
     }
     public void dugHoles(string facing, float x, float y)
     {
-        dughole = new DugHole(facing, x, y, player,this);
+        dughole = new DugHole(facing, x, y);
         AddChild(dughole);
+    }
+    public void CheckBox(string facing, float x, float y)
+    {
+        check.checkCollision(facing,x,y);
     }
     #endregion
 }

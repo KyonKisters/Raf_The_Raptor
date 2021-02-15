@@ -7,8 +7,9 @@ namespace GXPEngine
 {
     public class EAAProjectile : Sprite
     {
+      
         string facing;
-        float speed = 5;
+        float speed = 3;
         Player player;
         Enemy enemy;
         //----------------------------------------------------------------------------------------
@@ -56,7 +57,6 @@ namespace GXPEngine
         {
             float moveX = 0;
             float moveY = 0;
-            //x += 20;
 
             if (facing == "LEFT")
             {
@@ -75,6 +75,7 @@ namespace GXPEngine
             {
                 moveY += speed;
             }
+            Move(moveX, moveY);
             Collision collision = MoveUntilCollision(moveX, moveY);
             if (collision != null)
             {
@@ -91,13 +92,17 @@ namespace GXPEngine
         #region Collision
         void handleCollision(Collision col)
         {
+            if (!(col.other is Player) & !(col.other is Check) & !(col.other is DugHole))
+            {
+                LateDestroy();
+            }
             if (col.other is Player)
             {
                 player.life--;
             }
-            LateDestroy();
             if (col.other is Enemy)
             {
+                LateDestroy();
                 enemy.life--;
                 if (enemy.life <= 0)
                 {

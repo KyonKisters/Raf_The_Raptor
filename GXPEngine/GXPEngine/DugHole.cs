@@ -10,8 +10,6 @@ using TiledMapParser;
     public class DugHole: Sprite
     {
     string facing;
-    Player player;
-    Level level;
     float lifetime=0.003f;
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
@@ -22,14 +20,13 @@ using TiledMapParser;
     /// Constructor of the Dug hole
     /// </summary>
     #region Constructor
-    public DugHole(string facing, float x, float y, Player player, Level level) : base("DugHole.png")
+    public DugHole(string facing, float x, float y) : base("DugHole.png")
         {
             SetOrigin(width / 2, height / 2);
             this.facing = facing;
             this.x = x;
             this.y = y;
-            this.player = player;
-            this.level = level;
+
 
             if (this.facing == "TOP")
             {
@@ -52,7 +49,6 @@ using TiledMapParser;
     void Update()
     {
         alpha -= lifetime;
-        Console.WriteLine(alpha);
         if (alpha<=0)
         {
             LateDestroy();
