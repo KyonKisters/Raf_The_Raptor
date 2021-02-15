@@ -24,9 +24,12 @@ using TiledMapParser;
     #region Constructor
     public Level(string filename, MyGame game,int levelnumber) : base (false)
         {
+
         _game = game;
         this.levelNumber = levelnumber;
+
         createLevel(filename);
+
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -52,6 +55,7 @@ using TiledMapParser;
         loader.LoadObjectGroups(0);
 
         enemy.createPlayer(player);
+        
     }
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
     {
@@ -80,7 +84,7 @@ using TiledMapParser;
     #region create projectiles
     public void Attack(string facing, float x, float y)
     {
-        projectile = new EAAProjectile(facing, x, y);
+        projectile = new EAAProjectile(facing, x, y,player,enemy);
         AddChild(projectile);
     }
     #endregion

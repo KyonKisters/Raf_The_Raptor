@@ -41,6 +41,7 @@
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="LittleStone.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="smallMeat.cs" />
     <Compile Include="Tunnel.cs" />
   </ItemGroup>
 </Project>

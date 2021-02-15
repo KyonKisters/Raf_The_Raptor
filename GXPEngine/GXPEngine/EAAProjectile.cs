@@ -9,6 +9,8 @@ namespace GXPEngine
     {
         string facing;
         float speed = 5;
+        Player player;
+        Enemy enemy;
         //----------------------------------------------------------------------------------------
         //                                        Constructor
         //----------------------------------------------------------------------------------------
@@ -16,12 +18,14 @@ namespace GXPEngine
         /// Constructor of the Projectile
         /// </summary>
        #region Constructor
-        public EAAProjectile(string facing, float x, float y) : base("EAAhitbox.png") 
+        public EAAProjectile(string facing, float x, float y,Player player,Enemy enemy) : base("EAAhitbox.png") 
         {
             SetOrigin(width / 2, height / 2);
             this.facing = facing;
             this.x = x;
             this.y = y;
+            this.player = player;
+            this.enemy = enemy;
 
             if (this.facing == "TOP")
             {
@@ -87,8 +91,21 @@ namespace GXPEngine
         #region Collision
         void handleCollision(Collision col)
         {
+            if (col.other is Player)
+            {
+                player.life--;
+            }
             LateDestroy();
+            if (col.other is Enemy)
+            {
+                enemy.life--;
+                if (enemy.life <= 0)
+                {
+                    col.other.LateDestroy();
+                }
+            }
         }
+
         #endregion
         void Update()
         {

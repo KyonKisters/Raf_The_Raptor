@@ -12,7 +12,7 @@ public class Enemy : AnimationSprite
     public float speed = 1f;
     int attacktimer;
     public bool attack = false;
-    public float health;
+    public float life = 2;
     string facing;
     Level level;
     Player player;

@@ -10,13 +10,15 @@ using TiledMapParser;
 public class Player : AnimationSprite
 {
     float speed = 4f;
-    int attacktimer = 0;
     bool attack;
     string facing;
     Level level;
     MyGame _game;
     int levelnumber;
     bool change;
+    int smallmeat;
+    public int life = 5;
+
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
     //----------------------------------------------------------------------------------------
@@ -63,7 +65,7 @@ public class Player : AnimationSprite
     {
         float moveX = 0;
         float moveY = 0;
-        
+        Console.WriteLine(life);
         if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT))
         {
             Facing = Direction.LEFT;
@@ -123,7 +125,20 @@ public class Player : AnimationSprite
                 levelnumber = 1;
             }
             _game.LoadLevel("Level" + levelnumber + ".tmx",levelnumber);
-            
+        }
+        if (col.other is SmallMeat)
+        {
+            smallmeat++;
+            col.other.LateDestroy();
+            if (smallmeat == 3)
+            {
+
+            }
+        }
+        if (col.other is LittleStone)
+        {
+            col.other.LateDestroy();
+            attack = true;
         }
     }
     #endregion
@@ -136,17 +151,11 @@ public class Player : AnimationSprite
     #region Attack
     void Attack()
     {
-        attacktimer++;
         if (Input.GetKey(Key.E) & attack)
         {
             facing = Facing.ToString();
             level.Attack(facing, this.x, this.y);
             attack = false;
-        }
-        if (attacktimer > 50)
-        {
-            attacktimer = 0;
-            attack = true;
         }
     }
 
