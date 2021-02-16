@@ -59,7 +59,7 @@ using TiledMapParser;
         loader.LoadObjectGroups(0);
         
         enemy.createPlayer(player);
-        check = new Check(player);
+        check = new Check(player,levelNumber);
     }
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
     {

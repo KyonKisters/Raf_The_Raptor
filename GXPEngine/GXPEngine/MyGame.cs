@@ -28,7 +28,7 @@ public class MyGame : Game
     //                                        Load Levels
     //----------------------------------------------------------------------------------------
     /// <summary>
-    /// Load the levels 
+    /// Load the levels
     /// </summary>
     #region Load Levels
     public void LoadLevel(string filename,int levelnumber)

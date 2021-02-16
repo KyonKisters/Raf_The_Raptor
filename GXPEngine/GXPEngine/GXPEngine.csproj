@@ -42,6 +42,8 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
+    <Compile Include="HealthBar.cs" />
+    <Compile Include="HUDSmallMeat.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LittleStone.cs" />
     <Compile Include="MyGame.cs" />
