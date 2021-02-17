@@ -17,12 +17,13 @@ public class Player : AnimationSprite
     int levelnumber;
     bool change;
     int smallmeat;
-    public int life = 5;
+    public int life = 4;
     public bool cantDigAHole=false;
     int animationtimer=0;
     bool stopOtherAnimation = true;
-    HealthBar healthbar;
-    HUDSmallMeat hudsmallmeat;
+    HealthBar healthbar= new HealthBar();
+    HUDSmallMeat hudsmallmeat = new HUDSmallMeat();
+    Enemy enemy;
 
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
@@ -36,9 +37,7 @@ public class Player : AnimationSprite
     public Player(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
         SetOrigin(width / 2, height / 2);
-        healthbar = new HealthBar();
         AddChild(healthbar);
-        hudsmallmeat = new HUDSmallMeat();
         AddChild(hudsmallmeat);
     }
     #endregion
@@ -61,6 +60,11 @@ public class Player : AnimationSprite
     {
         this.levelnumber = levelnumber;
     }
+    public void createEnemyInst(Enemy enemy)
+    {
+        this.enemy = enemy;
+    }
+
     #endregion
     //----------------------------------------------------------------------------------------
     //                                        Movement
@@ -72,6 +76,7 @@ public class Player : AnimationSprite
 
     void Movement()
     {
+
         float moveX = 0;
         float moveY = 0;
 
@@ -229,6 +234,7 @@ public class Player : AnimationSprite
         if (col.other is SmallMeat)
         {
             smallmeat++;
+            
             col.other.LateDestroy();
             if (smallmeat == 3)
             {
@@ -254,7 +260,7 @@ public class Player : AnimationSprite
         if (Input.GetKey(Key.E) & attack)
         {
             facing = Facing.ToString();
-            level.Attack(facing, this.x, this.y);
+            level.Attack(facing, this.x, this.y,true,false);
             attack = false;
         }
     }
@@ -285,5 +291,7 @@ public class Player : AnimationSprite
         Attack();
         dugHole();
         HandleAnimation();
+        hudsmallmeat.Update(smallmeat);
+        healthbar.Update(life);
     }
 }

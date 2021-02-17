@@ -84,6 +84,7 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
+    <Compile Include="PAAProjectile.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="smallMeat.cs" />
     <Compile Include="TriggerBox.cs" />

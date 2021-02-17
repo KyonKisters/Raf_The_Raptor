@@ -5,13 +5,11 @@ using System.Text;
 using GXPEngine.Core;
 using GXPEngine;
 
-public class EAAProjectile : Sprite
+class PAAProjectile : Sprite
 {
-
     string facing;
     float speed = 3;
-    Player player;
-    Level level;
+    Enemy enemy;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -19,14 +17,13 @@ public class EAAProjectile : Sprite
     /// Constructor of the Projectile
     /// </summary>
     #region Constructor
-    public EAAProjectile(string facing, float x, float y, Player player,Level level) : base("EAAhitbox.png")
+    public PAAProjectile(string facing, float x, float y, Enemy enemy) : base("PAAhitbox.png")
     {
         SetOrigin(width / 2, height / 2);
         this.facing = facing;
         this.x = x;
         this.y = y;
-        this.player = player;
-        this.level = level;
+        this.enemy = enemy;
 
         if (this.facing == "TOP")
         {
@@ -92,19 +89,17 @@ public class EAAProjectile : Sprite
     #region Collision
     void handleCollision(Collision col)
     {
-        if (!(col.other is Enemy) & !(col.other is Check) & !(col.other is DugHole))
+        if (!(col.other is Player) & !(col.other is Check) & !(col.other is DugHole))
         {
             LateDestroy();
         }
-        if (col.other is Player)
+        if (col.other is Enemy)
         {
-            player.life--;
             LateDestroy();
-            if (player.life <= 0)
+            enemy.life--;
+            if (enemy.life <= 0)
             {
-                level.createGameOverScreen();
                 col.other.LateDestroy();
-                player.SetXY(0,0);
             }
         }
     }
@@ -115,3 +110,4 @@ public class EAAProjectile : Sprite
         Movement();
     }
 }
+

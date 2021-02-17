@@ -72,7 +72,7 @@ public class Enemy : AnimationSprite
 
                 if (attack)
                 {
-                    level.Attack(facing,this.x,this.y);
+                    level.Attack(facing,this.x,this.y,false,true);
                     attack = false;
                 }
                 attacktimer = 0;

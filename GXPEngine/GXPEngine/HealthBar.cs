@@ -13,9 +13,28 @@ public class HealthBar : AnimationSprite
         y -= 325;
     }
 
-    void Update()
-    { 
-
+    public void Update(int life)
+    {
+        if (life ==4)
+        {
+            SetFrame(0);
+        }
+        if (life == 3)
+        {
+            SetFrame(1);
+        }
+        if (life == 2)
+        {
+            SetFrame(2);
+        }
+        if (life == 1)
+        {
+            SetFrame(3);
+        }
+        if (life == 0)
+        {
+            SetFrame(4);
+        }
     }
 }
 

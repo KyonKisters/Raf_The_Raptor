@@ -7,16 +7,19 @@ using GXPEngine.Core;
 using TiledMapParser;
 
 
-    public class Level : GameObject
-    {
+public class Level : GameObject
+{
     Player player;
     Enemy enemy;
     Camera camera;
-    EAAProjectile projectile;
+    PAAProjectile Pprojectile;
+    EAAProjectile Eprojectile;
     MyGame _game;
     DugHole dughole;
     Check check;
     int levelNumber;
+    bool dead = false;
+    Sprite gameover;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -24,8 +27,8 @@ using TiledMapParser;
     /// Constructor of the Game
     /// </summary>
     #region Constructor
-    public Level(string filename, MyGame game,int levelnumber) : base (false)
-        {
+    public Level(string filename, MyGame game, int levelnumber) : base(false)
+    {
 
         _game = game;
         this.levelNumber = levelnumber;
@@ -57,9 +60,10 @@ using TiledMapParser;
         //Object layer connect with classes 
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
-        
+
         enemy.createPlayer(player);
-        check = new Check(player,levelNumber);
+        check = new Check(player, levelNumber);
+        player.createEnemyInst(enemy);
     }
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
     {
@@ -86,10 +90,18 @@ using TiledMapParser;
     /// Creates the projectiles so that this Game is the parent
     /// </summary>
     #region create projectiles
-    public void Attack(string facing, float x, float y)
+    public void Attack(string facing, float x, float y, bool PlayerAttack, bool EnemyAttack)
     {
-        projectile = new EAAProjectile(facing, x, y,player,enemy);
-        AddChild(projectile);
+        if (PlayerAttack)
+        {
+            Pprojectile = new PAAProjectile(facing, x, y, enemy);
+            AddChild(Pprojectile);
+        }
+        if (EnemyAttack)
+        {
+            Eprojectile = new EAAProjectile(facing, x, y, player, this);
+            AddChild(Eprojectile);
+        }
     }
     public void dugHoles(string facing, float x, float y)
     {
@@ -98,7 +110,32 @@ using TiledMapParser;
     }
     public void CheckBox(string facing, float x, float y)
     {
-        check.checkCollision(facing,x,y);
+        check.checkCollision(facing, x, y);
     }
     #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Create Game Over Screen
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Create Game Over Screen
+    /// </summary>
+    #region create GameOver Screen
+    public void createGameOverScreen()
+    {
+        gameover = new Sprite("Game-over-screen.png", false, false);
+        AddChild(gameover);
+        dead = true;
+    }
+    #endregion
+    void Update()
+    {
+        if (dead)
+        {
+            if (Input.GetKey(Key.SPACE))
+            {
+                _game.LoadLevel("Level" + levelNumber + ".tmx", levelNumber);
+                gameover.LateDestroy();
+            }
+        }
+    }
 }
