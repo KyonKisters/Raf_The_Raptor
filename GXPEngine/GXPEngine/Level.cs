@@ -10,7 +10,8 @@ using TiledMapParser;
 public class Level : GameObject
 {
     Player player;
-    Enemy enemy;
+    List<Enemy> enemies = new List<Enemy>();
+    List<TRex> trexs = new List<TRex>();
     Camera camera;
     PAAProjectile Pprojectile;
     EAAProjectile Eprojectile;
@@ -19,6 +20,7 @@ public class Level : GameObject
     Check check;
     int levelNumber;
     bool dead = false;
+    public int LVL;
     Sprite gameover;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -61,9 +63,16 @@ public class Level : GameObject
         loader.autoInstance = true;
         loader.LoadObjectGroups(0);
 
+        foreach (Enemy enemy in enemies)
+        { 
         enemy.createPlayer(player);
+        }
         check = new Check(player, levelNumber);
-        player.createEnemyInst(enemy);
+
+            foreach (TRex trex in trexs)
+            {
+                trex.createPlayer(player);
+            }
     }
     private void Loader_OnObjectCreated(Sprite sprite, TiledObject obj)
     {
@@ -78,8 +87,13 @@ public class Level : GameObject
         }
         if (sprite is Enemy enemy)
         {
-            this.enemy = enemy;
-            this.enemy.createLevelInst(this);
+            enemies.Add(enemy);
+            enemy.createLevelInst(this);
+        }
+        if (sprite is TRex trex)
+        {
+            trexs.Add(trex);
+            trex.createLevelInst(this);
         }
     }
     #endregion
@@ -94,7 +108,7 @@ public class Level : GameObject
     {
         if (PlayerAttack)
         {
-            Pprojectile = new PAAProjectile(facing, x, y, enemy);
+            Pprojectile = new PAAProjectile(facing, x, y);
             AddChild(Pprojectile);
         }
         if (EnemyAttack)
@@ -131,9 +145,10 @@ public class Level : GameObject
     {
         if (dead)
         {
+            
             if (Input.GetKey(Key.SPACE))
             {
-                _game.LoadLevel("Level" + levelNumber + ".tmx", levelNumber);
+                _game.LoadLevel("Level" + levelNumber + ".tmx", levelNumber,player.delete);
                 gameover.LateDestroy();
             }
         }

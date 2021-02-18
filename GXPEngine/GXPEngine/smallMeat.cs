@@ -10,7 +10,6 @@ using System.Drawing;
 
 public class SmallMeat : AnimationSprite
 {
-    int smallMeat;
     public SmallMeat(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
 

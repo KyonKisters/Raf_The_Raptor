@@ -9,7 +9,6 @@ class PAAProjectile : Sprite
 {
     string facing;
     float speed = 3;
-    Enemy enemy;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -17,13 +16,12 @@ class PAAProjectile : Sprite
     /// Constructor of the Projectile
     /// </summary>
     #region Constructor
-    public PAAProjectile(string facing, float x, float y, Enemy enemy) : base("PAAhitbox.png")
+    public PAAProjectile(string facing, float x, float y) : base("PAAhitbox.png")
     {
         SetOrigin(width / 2, height / 2);
         this.facing = facing;
         this.x = x;
         this.y = y;
-        this.enemy = enemy;
 
         if (this.facing == "TOP")
         {
@@ -93,11 +91,11 @@ class PAAProjectile : Sprite
         {
             LateDestroy();
         }
-        if (col.other is Enemy)
+        if (col.other is Enemy newEnemy)
         {
+            newEnemy.life--;
             LateDestroy();
-            enemy.life--;
-            if (enemy.life <= 0)
+            if (newEnemy.life <= 0)
             {
                 col.other.LateDestroy();
             }

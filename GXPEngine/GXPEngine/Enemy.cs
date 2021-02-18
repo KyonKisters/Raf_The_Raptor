@@ -18,6 +18,9 @@ public class Enemy : AnimationSprite
     Level level;
     Player player;
     TriggerBox triggerBox = new TriggerBox ();
+    int animationtimer=0;
+    bool stopOtherAnimation=false;
+    bool walking = false;
 
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -93,11 +96,8 @@ public class Enemy : AnimationSprite
     {
         this.distance = distance;
         Boolean hitarea;
-        float distX = player.x - this.x;
-        float distY = player.y - this.y;
-        float DistBetwThisAndObj = Mathf.Sqrt(distX * distX + distY * distY);
 
-        if (DistBetwThisAndObj < distance)
+        if (DistanceTo(player) < distance)
         {
             hitarea = true;
         }
@@ -119,6 +119,8 @@ public class Enemy : AnimationSprite
         float moveY = 0;
         if (HitArea(distance))
         {
+            stopOtherAnimation = false;
+            walking = true;
             if (this.x > player.x)
             {
                 facing = "LEFT";
@@ -144,10 +146,76 @@ public class Enemy : AnimationSprite
                 moveY = speed;
             }
         }
+        else walking = false;
+        Console.WriteLine();
         Collision collision = MoveUntilCollision(moveX, moveY);
         if (collision != null)
         {
             handleCollision(collision);
+        }
+    }
+    #endregion
+    //----------------------------------------------------------------------------------------
+    //                                        Animations
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Animation of the player
+    /// </summary>
+    #region Animations
+    void HandleAnimation()
+    {
+        animationtimer++;
+        if (!stopOtherAnimation)
+        {
+            if (facing == "LEFT")
+            {
+                Mirror(true, false);
+                SetCycle(1, 4);
+            }
+
+            if (facing == "RIGHT")
+            {
+                Mirror(false, false);
+                SetCycle(1, 4);
+            }
+
+            if (facing == "TOP")
+            {
+                SetCycle(15, 3);
+            }
+
+            if (facing == "DOWN")
+            {
+                SetCycle(8, 4);
+            }
+        }
+
+        if (!walking & (facing=="LEFT" | facing == "RIGHT")) // Idle Animation
+        {
+            stopOtherAnimation = true;
+            SetCycle(5, 2);
+        }
+
+        if (!walking & facing =="TOP")// Idle Animation
+        {
+            stopOtherAnimation = true;
+            SetCycle(18, 2);
+        }
+
+        if (!walking & facing == "DOWN")// Idle Animation
+        {
+            stopOtherAnimation = true;
+            SetCycle(12, 2);
+        }
+        if (animationtimer > 12 & !stopOtherAnimation) //Walk Animation time
+        {
+            NextFrame();
+            animationtimer = 0;
+        }
+        if (animationtimer > 30 & stopOtherAnimation)//Idle Animation time
+        {
+            NextFrame();
+            animationtimer = 0;
         }
     }
     #endregion
@@ -167,6 +235,7 @@ public class Enemy : AnimationSprite
     {
         Movement();
         Attack();
+        HandleAnimation();
     }
 }
 

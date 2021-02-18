@@ -7,11 +7,14 @@ using GXPEngine;
 
 public class EAAProjectile : Sprite
 {
-
+    int lifetime=30;
     string facing;
     float speed = 3;
     Player player;
     Level level;
+    Sound gotHit = new Sound("damage-sound.wav");
+    Sound gameOver = new Sound("game-over.wav");
+    int LVL;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -27,6 +30,7 @@ public class EAAProjectile : Sprite
         this.y = y;
         this.player = player;
         this.level = level;
+        LVL = level.LVL;
 
         if (this.facing == "TOP")
         {
@@ -55,6 +59,8 @@ public class EAAProjectile : Sprite
     #region Movement 
     void Movement()
     {
+        lifetime--;
+        Console.WriteLine(lifetime);
         float moveX = 0;
         float moveY = 0;
 
@@ -74,6 +80,10 @@ public class EAAProjectile : Sprite
         if (facing == "DOWN")
         {
             moveY += speed;
+        }
+        if (lifetime<=0)
+        {
+            LateDestroy();
         }
         Move(moveX, moveY);
         Collision collision = MoveUntilCollision(moveX, moveY);
@@ -100,15 +110,16 @@ public class EAAProjectile : Sprite
         {
             player.life--;
             LateDestroy();
+            gotHit.Play();
             if (player.life <= 0)
             {
                 level.createGameOverScreen();
                 col.other.LateDestroy();
                 player.SetXY(0,0);
+                gameOver.Play();
             }
         }
     }
-
     #endregion
     void Update()
     {

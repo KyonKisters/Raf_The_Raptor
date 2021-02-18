@@ -36,6 +36,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Brachiosaurus.cs" />
+    <Compile Include="Caveman.cs" />
     <Compile Include="Check.cs" />
     <Compile Include="DugHole.cs" />
     <Compile Include="EAAProjectile.cs" />
@@ -87,6 +89,8 @@
     <Compile Include="PAAProjectile.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="smallMeat.cs" />
+    <Compile Include="TRex.cs" />
+    <Compile Include="Triceratops .cs" />
     <Compile Include="TriggerBox.cs" />
     <Compile Include="Tunnel.cs" />
   </ItemGroup>
