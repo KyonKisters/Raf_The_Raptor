@@ -36,12 +36,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Brachiosaurus.cs" />
+    <Compile Include="Caveman.cs" />
     <Compile Include="Check.cs" />
     <Compile Include="DugHole.cs" />
     <Compile Include="EAAProjectile.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
+    <Compile Include="HealthBar.cs" />
+    <Compile Include="HUDSmallMeat.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LittleStone.cs" />
     <Compile Include="MyGame.cs" />
@@ -82,8 +86,12 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
+    <Compile Include="PAAProjectile.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="smallMeat.cs" />
+    <Compile Include="TRex.cs" />
+    <Compile Include="Triceratops .cs" />
+    <Compile Include="TriggerBox.cs" />
     <Compile Include="Tunnel.cs" />
   </ItemGroup>
 </Project>

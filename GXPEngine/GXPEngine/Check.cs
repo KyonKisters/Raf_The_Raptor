@@ -12,6 +12,7 @@ public class Check : Sprite
         Player player;
         float speed = 4f;
         string facing;
+        int levelnumber;
         public enum Direction { TOP, DOWN, RIGHT, LEFT };
         public Direction Facing;
     //----------------------------------------------------------------------------------------
@@ -21,11 +22,12 @@ public class Check : Sprite
     /// Constructor of the Checkbox
     /// </summary>
     #region Constructor
-    public Check(Player player) : base("CheckBox.png")
+    public Check(Player player,int levelnumber) : base("CheckBox.png")
         {
         SetOrigin(width / 2, height / 2);
         alpha = 0.0f;
         this.player = player;
+        this.levelnumber = levelnumber;
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -45,19 +47,52 @@ public class Check : Sprite
 
         if (this.facing == "TOP")
         {
-            this.y -= 48;
+            if (levelnumber==1)
+            {
+                this.y -= 48;
+            }
+            if (levelnumber == 2)
+            {
+                this.y -= 96;
+            }
+            if (levelnumber == 3)
+            {
+                this.y -= 144;
+            }
             moveX = 0;
             moveY = -speed;
         }
         if (this.facing == "DOWN")
         {
-            this.y += 48;
+            if (levelnumber == 1)
+            {
+                this.y += 48;
+            }
+            if (levelnumber == 2)
+            {
+                this.y += 96;
+            }
+            if (levelnumber == 3)
+            {
+                this.y += 144;
+            }
             moveX = 0;
             moveY = speed;
         }
         if (this.facing == "RIGHT")
         {
-            this.x += 48;
+            if (levelnumber == 1)
+            {
+                this.x += 48;
+            }
+            if (levelnumber == 2)
+            {
+                this.x += 144;
+            }
+            if (levelnumber == 3)
+            {
+                this.x += 192;
+            }
             moveX = speed;
             moveY = 0;
         }
@@ -65,7 +100,18 @@ public class Check : Sprite
         {
             moveX = -speed;
             moveY = 0;
-            this.x -= 48;
+            if (levelnumber == 1)
+            {
+                this.x -= 48;
+            }
+            if (levelnumber == 2)
+            {
+                this.x -= 144;
+            }
+            if (levelnumber == 3)
+            {
+                this.x -= 192;
+            }
         }
         Move(moveX,moveY);
         Collision col = MoveUntilCollision(moveX,moveY);

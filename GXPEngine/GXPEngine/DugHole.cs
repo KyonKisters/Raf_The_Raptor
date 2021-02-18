@@ -11,6 +11,7 @@ using TiledMapParser;
     {
     string facing;
     float lifetime=0.003f;
+
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
     //----------------------------------------------------------------------------------------
