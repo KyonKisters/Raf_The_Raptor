@@ -10,7 +10,7 @@ namespace GXPEngine
         public TriggerBox() : base("TriggerBox.png",false,false)
         {
             SetOrigin(this.width / 2,this.height/2) ;
-            alpha = 0.2f;
+            alpha = 0f;
         }
     }
 }

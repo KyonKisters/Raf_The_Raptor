@@ -31,6 +31,7 @@ public class EAAProjectile : Sprite
         this.player = player;
         this.level = level;
         LVL = level.LVL;
+        alpha = 0f;
 
         if (this.facing == "TOP")
         {
@@ -60,7 +61,6 @@ public class EAAProjectile : Sprite
     void Movement()
     {
         lifetime--;
-        Console.WriteLine(lifetime);
         float moveX = 0;
         float moveY = 0;
 
@@ -109,7 +109,6 @@ public class EAAProjectile : Sprite
         if (col.other is Player)
         {
             player.life--;
-            LateDestroy();
             gotHit.Play();
             if (player.life <= 0)
             {
@@ -118,6 +117,7 @@ public class EAAProjectile : Sprite
                 player.SetXY(0,0);
                 gameOver.Play();
             }
+            LateDestroy();
         }
     }
     #endregion

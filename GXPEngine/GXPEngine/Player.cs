@@ -9,28 +9,60 @@ using TiledMapParser;
 
 public class Player : AnimationSprite
 {
+    
     bool walkSoundON;
     float walkSoundTimer;
-    float speed = 6f;
+    float speed = 4f;
     bool attack;
+    bool sprint = true;
+    public bool discoveredenemypack = false;
     string facing;
+    int tutorialProgress=0;
+    int tutorialTimer=0;
+    int dashtimer = 0;
+    int dashspeed;
+    bool AAttack;
+    int attacktimer;
+    public bool discoveredEnemy = false;
+    public bool discoveredTRex = false;
+    public bool cantPlaceMeat = false;
+    bool canDash = true;
+    bool dashes = false;
     Level level;
     MyGame _game;
-    int levelnumber;
+    public bool collectedMeat = false;
+    public int levelnumber;
     bool change;
     int smallmeat;
+    public int hugeMeat;
     public int life = 4;
     public bool cantDigAHole=false;
     int animationtimer=0;
     bool stopOtherAnimation = true;
     public bool delete = false;
     HealthBar healthbar= new HealthBar();
-    HUDSmallMeat hudsmallmeat = new HUDSmallMeat();
+    HUDMeat hudsmallmeat = new HUDMeat();
     Sound collect = new Sound("item-collect.wav");
     Sound collectStone = new Sound("Rock.wav");
     Sound stonethrow = new Sound("throwingrock.wav");
     Sound nextLevel = new Sound("NextLevel.wav");
     Sound eat = new Sound("eat.wav");
+    Sound dash = new Sound("dash.wav");
+    Sound rafattack = new Sound("RAFATTACK.wav");
+    Sprite imscared = new Sprite("imscared.png",false,false);
+    Sprite pressWASD = new Sprite("WASD.png", false, false);
+    Sprite eek = new Sprite("eekchat.png", false, false);
+    Sprite hideOrRun = new Sprite("hidorrun.png", false, false);
+    Sprite pressQ = new Sprite("PressQ.png", false, false);
+    Sprite or = new Sprite("or.png", false, false);
+    Sprite pressShift = new Sprite("shift.png", false, false);
+    Sprite meat = new Sprite("meat.png", false, false);
+    Sprite lure = new Sprite("lure.png", false, false);
+    Sprite pressE = new Sprite("pressE.png", false, false);
+    Sprite canhelpmeout = new Sprite("canhelpmeout.png",false,false);
+    Sprite throwStone = new Sprite("throwStone.png",false,false);
+    Sprite dontletmethrough = new Sprite("dontletmethrough.png",false,false);
+    Sprite defeat5 = new Sprite("defeat5.png",false,false);
     //Sound walking = new Sound("walk-sound.wav");
     public enum Direction { TOP, DOWN, RIGHT, LEFT };
     public Direction Facing;
@@ -43,6 +75,34 @@ public class Player : AnimationSprite
     #region Constructor
     public Player(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
+        imscared.x -= 50;
+        imscared.y -= 100;
+        pressWASD.x -= 50;
+        pressWASD.y -= 100;
+        eek.x -= 50;
+        eek.y -= 100;
+        hideOrRun.x -= 50;
+        hideOrRun.y -= 100;
+        pressQ.x -= 50;
+        pressQ.y -= 100;
+        or.x -= 50;
+        or.y -= 100;
+        pressShift.x -= 50;
+        pressShift.y -= 100;
+        meat.x -= 50;
+        meat.y -= 100;
+        lure.x -= 50;
+        lure.y -= 100;
+        pressE.x -= 50;
+        pressE.y -= 100;
+        canhelpmeout.x -= 50;
+        canhelpmeout.y -= 100;
+        throwStone.x -= 50;
+        throwStone.y -= 100;
+        dontletmethrough.x -= 50;
+        dontletmethrough.y -= 100;
+        defeat5.x -= 50;
+        defeat5.y -= 100;
         SetOrigin(width / 2, height / 2);
         AddChild(healthbar);
         AddChild(hudsmallmeat);
@@ -70,6 +130,155 @@ public class Player : AnimationSprite
 
     #endregion
     //----------------------------------------------------------------------------------------
+    //                                        Tutorial boxes
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Tutorial
+    /// </summary>
+    #region Tutorial
+    void TutorialBoxes()
+    {
+        Console.WriteLine(tutorialProgress);
+        if (levelnumber == 1)
+        {
+            if (tutorialProgress == 0)
+            {
+                AddChild(imscared);
+                tutorialTimer++;
+                if (tutorialTimer > 80)
+                {
+                    imscared.LateDestroy();
+                    AddChild(pressWASD);
+                    tutorialTimer = 0;
+                    tutorialProgress++;
+                }
+            }
+            if ((Input.GetKey(Key.W) | Input.GetKey(Key.A) | Input.GetKey(Key.S) | Input.GetKey(Key.D)) & tutorialProgress == 1)
+            {
+                pressWASD.LateDestroy();
+                tutorialProgress++;
+            }
+            if (tutorialProgress == 2 & discoveredEnemy)
+            {
+                tutorialTimer++;
+                if (tutorialTimer > 0 & tutorialTimer < 2)
+                {
+                    AddChild(eek);
+                }
+                if (tutorialTimer > 80 & tutorialTimer < 82)
+                {
+                    eek.LateDestroy();
+                    AddChild(hideOrRun);
+                }
+                if (tutorialTimer > 200 & tutorialTimer < 202)
+                {
+                    hideOrRun.LateDestroy();
+                    AddChild(pressQ);
+                }
+                if (tutorialTimer > 280 & tutorialTimer < 282)
+                {
+                    pressQ.LateDestroy();
+                    AddChild(or);
+                }
+                if (tutorialTimer > 310 & tutorialTimer < 312)
+                {
+                    or.LateDestroy();
+                    AddChild(pressShift);
+                    tutorialTimer = 0;
+                    tutorialProgress++;
+                }
+            }
+            if ((Input.GetKey(Key.Q) | Input.GetKey(Key.LEFT_SHIFT) | Input.GetKey(Key.RIGHT_SHIFT)) & tutorialProgress == 3)
+            {
+                pressShift.LateDestroy();
+                tutorialProgress++;
+            }
+            if (tutorialProgress == 4 & discoveredTRex)
+            {
+                tutorialTimer++;
+                if (tutorialTimer > 0 & tutorialTimer < 2)
+                {
+                    AddChild(meat);
+                }
+                if (tutorialTimer > 80 & tutorialTimer < 82)
+                {
+                    meat.LateDestroy();
+                    AddChild(lure);
+                }
+                if (tutorialTimer > 140 & tutorialTimer < 142)
+                {
+                    lure.LateDestroy();
+                    tutorialProgress++;
+                }
+            }
+            if (smallmeat == 3 & tutorialProgress == 5)
+            {
+                AddChild(pressE);
+            }
+            if (tutorialProgress == 5 & Input.GetKey(Key.E) & smallmeat == 3)
+            {
+                pressE.LateDestroy();
+                tutorialProgress++;
+                tutorialTimer = 0;
+            }
+        }
+        if (levelnumber==2)
+        {
+            if (tutorialProgress == 6)
+            {
+                tutorialTimer++;
+                if (tutorialTimer > 0 & tutorialTimer<2)
+                {
+                    AddChild(canhelpmeout);
+                }
+                if (tutorialTimer > 80 & tutorialTimer <82)
+                {
+                    canhelpmeout.LateDestroy();
+                    AddChild(throwStone);
+                }
+                if (Input.GetKey(Key.E))
+                {
+                    tutorialProgress++;
+                    tutorialTimer = 0;
+                }
+            }
+            if (tutorialProgress==7)
+            {
+                tutorialTimer++;
+                if (tutorialTimer>0 & tutorialTimer<2)
+                {
+                    throwStone.LateDestroy();
+                    tutorialTimer = 0;
+                    tutorialProgress++;
+                }
+            }
+            if (tutorialProgress==8)
+            {
+                if (discoveredenemypack)
+                {
+                    tutorialTimer++;
+                    if (tutorialTimer > 0 & tutorialTimer < 2)
+                    {
+                        AddChild(dontletmethrough);
+                    }
+                    if (tutorialTimer > 100 & tutorialTimer < 102)
+                    {
+                        dontletmethrough.LateDestroy();
+                        AddChild(defeat5);
+                    }
+                    if (tutorialTimer > 280 & tutorialTimer < 282)
+                    {
+                        defeat5.LateDestroy();
+                        tutorialProgress++;
+                        tutorialTimer = 0;
+                    }
+                }
+            }
+
+        }
+    }
+    #endregion
+    //----------------------------------------------------------------------------------------
     //                                        Movement
     //----------------------------------------------------------------------------------------
     /// <summary>
@@ -79,7 +288,14 @@ public class Player : AnimationSprite
 
     void Movement()
     {
-
+        if (levelnumber==1)
+        {
+            speed = 4f;
+        }
+        if (levelnumber == 2)
+        {
+            speed = 6f;
+        }
         float moveX = 0;
         float moveY = 0;
         walkSoundTimer++;
@@ -120,9 +336,65 @@ public class Player : AnimationSprite
             moveX = 0;
             moveY = speed;
         }
+        if (dashes)
+        {
+            if (sprint)
+            {
+                if (levelnumber == 1)
+                {
+                    dashspeed += 45;
+                }
+                if (levelnumber == 2)
+                {
+                    dashspeed += 25;
+                }
+                if (levelnumber == 3)
+                {
+                    dashspeed += 25;
+                }
+            }
+            if (facing == "TOP")
+            {
+                moveY -= dashspeed;
+            }
+            if (facing == "DOWN")
+            {
+                moveY += dashspeed;
+            }
+            if (facing == "RIGHT")
+            {
+                moveX += dashspeed;
+            }
+            if (facing == "LEFT")
+            {
+                moveX -= dashspeed;
+            }
+            if (dashspeed >=90 & levelnumber==1)
+            {
+                sprint = false;
+            }
+            if (dashspeed >= 45 & levelnumber==2)
+            {
+                sprint = false;
+            }
+            if (dashspeed >= 45 & levelnumber == 3)
+            {
+                sprint = false;
+            }
+            if (!sprint)
+            {
+                dashspeed-=5;
+                if (dashspeed<=0)
+                {
+                    sprint = true;
+                    dashes = false;
+                }
+            }
+        }
 
         facing = Facing.ToString();
         level.CheckBox(facing, x, y);
+
         Collision collision = MoveUntilCollision(moveX, moveY); //You can move until collision, for example with Tiled Map
         if (collision != null)
         {
@@ -260,7 +532,6 @@ public class Player : AnimationSprite
 
     void handleCollision(Collision col)
     {
-        Console.WriteLine(col.other.name);
         if (col.other is Tunnel)
         {
             if (levelnumber <= 3 && !change)
@@ -284,6 +555,7 @@ public class Player : AnimationSprite
         }
         if (col.other is SmallMeat)
         {
+            
             if (levelnumber == 1)
             {
                 collect.Play();
@@ -294,7 +566,9 @@ public class Player : AnimationSprite
             col.other.LateDestroy();
             if (smallmeat == 3)
             {
-
+                smallmeat = 0;
+                hudsmallmeat.BigMeat = true;
+                hugeMeat = 1;
             }
         }
         if (col.other is LittleStone)
@@ -302,6 +576,13 @@ public class Player : AnimationSprite
             collectStone.Play();
             col.other.LateDestroy();
             attack = true;
+        }
+        if (col.other is BigMeatObject)
+        {
+           hugeMeat++;
+           collectedMeat = true;
+           collect.Play();
+           col.other.LateDestroy();
         }
     }
     #endregion
@@ -314,12 +595,55 @@ public class Player : AnimationSprite
     #region Attack
     void Attack()
     {
-        if (Input.GetKey(Key.E) & attack)
+        dashtimer++;
+        attacktimer++;
+        if (levelnumber == 2 | levelnumber==3)
         {
-            stonethrow.Play();
+            if (attack)
+            {
+                if (Input.GetKey(Key.E))
+                {
+                    stonethrow.Play();
+                    facing = Facing.ToString();
+                    level.Attack(facing, this.x, this.y, true, false, true);
+                    attack = false;
+                }
+            }
+            if (attacktimer >= 60)
+            {
+                AAttack = true;
+                if (Input.GetKey(Key.SPACE)& AAttack)
+                {
+                    rafattack.Play();
+                    facing = Facing.ToString();
+                    level.Attack(facing, this.x, this.y, true, false, false);
+                    AAttack = false;
+                    attacktimer = 0;
+                }
+            }
+            if (AAttack)
+            {
+                attacktimer = 60;
+            }
+        }
+
+        if (Input.GetKey(Key.E) & levelnumber == 1 & hudsmallmeat.BigMeat & !cantPlaceMeat & hugeMeat>0)
+        {
             facing = Facing.ToString();
-            level.Attack(facing, this.x, this.y,true,false);
-            attack = false;
+            level.placeMeat(facing,x,y);
+            hugeMeat--;
+            collectedMeat = false;
+        }
+        if (dashtimer>50)
+        {
+            dashtimer = 0;
+            canDash = true;
+        }
+        if ((Input.GetKey(Key.LEFT_SHIFT) | Input.GetKey(Key.RIGHT_SHIFT)) & canDash)
+        {
+            dash.Play();
+            canDash = false;
+            dashes = true;
         }
     }
 
@@ -333,7 +657,6 @@ public class Player : AnimationSprite
     #region Dug hole
     void dugHole()
     {
-
         if (Input.GetKey(Key.Q) & !cantDigAHole)
         {
             facing = Facing.ToString();
@@ -349,7 +672,8 @@ public class Player : AnimationSprite
         Attack();
         dugHole();
         HandleAnimation();
-        hudsmallmeat.Update(smallmeat);
+        TutorialBoxes();
+        hudsmallmeat.Update(smallmeat,hugeMeat);
         healthbar.Update(life);
     }
 }

@@ -21,6 +21,8 @@ public class Enemy : AnimationSprite
     int animationtimer=0;
     bool stopOtherAnimation=false;
     bool walking = false;
+    bool discovered=false;
+    Sound rawSound = new Sound("rawSound.wav");
 
     //----------------------------------------------------------------------------------------
     //                                        Constructor
@@ -34,7 +36,6 @@ public class Enemy : AnimationSprite
         SetOrigin(this.width/2,this.height/2);
         triggerBox.scale = this.distance/40;
         AddChild(triggerBox);
-        
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -64,10 +65,15 @@ public class Enemy : AnimationSprite
     {
         if (HitArea(distance))
         {
+            if (!discovered)
+            {
+                player.discoveredEnemy = true;
+                discovered = true;
+            }
             attacktimer++;
             if (attacktimer > 50)
             {
-            
+                
                 Random rnd = new Random();
                 float rndnumber = rnd.Next(0, 100);
                 attack = rndnumber < 25 ? true : false;
@@ -75,8 +81,9 @@ public class Enemy : AnimationSprite
 
                 if (attack)
                 {
-                    level.Attack(facing,this.x,this.y,false,true);
+                    level.Attack(facing,this.x,this.y,false,true,false);
                     attack = false;
+                    rawSound.Play(false,0,0.1f);
                 }
                 attacktimer = 0;
 
@@ -147,7 +154,6 @@ public class Enemy : AnimationSprite
             }
         }
         else walking = false;
-        Console.WriteLine();
         Collision collision = MoveUntilCollision(moveX, moveY);
         if (collision != null)
         {

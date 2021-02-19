@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GXPEngine;
 using GXPEngine.Core;
+using GXPEngine;
 using TiledMapParser;
 
-public class TRex : AnimationSprite
+public class EnemyBoss : AnimationSprite
 {
-    public float speed = 3f;
+    public float speed = 1f;
     int attacktimer;
     public bool attack = false;
-    public float life = 2;
+    public float life = 6;
     string facing;
-    float distance = 350;
-    float distance2 = 500;
-    int animationtimer;
-    bool discovered=false;
-    bool raw= false;
-    public bool Meatplaced=false;
+    float distance = 250;
     Level level;
     Player player;
     TriggerBox triggerBox = new TriggerBox();
-    BigMeatObject MyMeat;
-    Sound TrexRaw = new Sound("TREXRAW.wav");
-    int hugeMeat;
-
+    int animationtimer = 0;
+    bool stopOtherAnimation = false;
+    bool walking = false;
+    bool discovered = false;
+    Sound rawSound = new Sound("rawSound.wav");
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -33,11 +29,12 @@ public class TRex : AnimationSprite
     /// Constructor of the Enemy
     /// </summary>
     #region Constructor
-    public TRex(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
+    public EnemyBoss(string filename, int cols, int rows, TiledObject obj) : base(filename, cols, rows)
     {
         SetOrigin(this.width / 2, this.height / 2);
         triggerBox.scale = this.distance / 40;
         AddChild(triggerBox);
+
     }
     #endregion
     //----------------------------------------------------------------------------------------
@@ -55,10 +52,6 @@ public class TRex : AnimationSprite
     {
         this.player = player;
     }
-    public void createMeat(BigMeatObject meat)
-    {
-        MyMeat = meat;
-    }
     #endregion
     //----------------------------------------------------------------------------------------
     //                                        Attacks
@@ -69,16 +62,13 @@ public class TRex : AnimationSprite
     #region Attacks
     public void Attack()
     {
-        if (Input.GetKey(Key.E) & hugeMeat >= 1 & !player.collectedMeat)
-        {
-            Meatplaced = true;
-        }
-        if (player.collectedMeat)
-        {
-            Meatplaced = false;
-        }
         if (HitArea(distance))
         {
+            if (!discovered)
+            {
+                player.discoveredEnemy = true;
+                discovered = true;
+            }
             attacktimer++;
             if (attacktimer > 50)
             {
@@ -87,10 +77,12 @@ public class TRex : AnimationSprite
                 float rndnumber = rnd.Next(0, 100);
                 attack = rndnumber < 25 ? true : false;
 
+
                 if (attack)
                 {
-                    level.Attack(facing, this.x, this.y, false, true,false);
+                    level.Attack(facing, this.x, this.y, false, true, false);
                     attack = false;
+                    rawSound.Play(false, 0, 0.1f);
                 }
                 attacktimer = 0;
 
@@ -106,19 +98,6 @@ public class TRex : AnimationSprite
     /// Triggers when ever an object enters and this object will follow
     /// </summary>
     #region HitArea
-    public bool inRange(float distance)
-    {
-        this.distance2 = distance;
-        Boolean hitarea;
-
-        if (DistanceTo(player) < distance)
-        {
-            hitarea = true;
-        }
-        else hitarea = false;
-
-        return hitarea;
-    }
     public bool HitArea(float distance)
     {
         this.distance = distance;
@@ -128,24 +107,11 @@ public class TRex : AnimationSprite
         {
             hitarea = true;
         }
-        else hitarea= false;
-
-        return hitarea;
-    }
-    #endregion
-    public bool HitAreaMeat(float distance)
-    {
-        this.distance = distance;
-        Boolean hitarea;
-
-        if (DistanceTo(MyMeat) < distance)
-        {
-            hitarea = true;
-        }
         else hitarea = false;
 
         return hitarea;
     }
+    #endregion
     //----------------------------------------------------------------------------------------
     //                                         Movement
     //----------------------------------------------------------------------------------------
@@ -155,93 +121,38 @@ public class TRex : AnimationSprite
     #region Movement
     public void Movement()
     {
-        if (player.levelnumber==1)
-        {
-            speed = 3f;
-        }
-        if (player.levelnumber == 2)
-        {
-            speed = 7.5f;
-            distance = 700;
-            distance2 = 700;
-        }
         float moveX = 0;
         float moveY = 0;
-
-        if (inRange(distance2))
+        if (HitArea(distance))
         {
-            if (!raw)
+            stopOtherAnimation = false;
+            walking = true;
+            if (this.x > player.x)
             {
-                TrexRaw.Play();
-                raw = true;
+                facing = "LEFT";
+                moveX = -speed;
+                moveY = 0;
             }
-            if (!Meatplaced)
+            if (this.x < player.x)
             {
-                if (HitArea(distance))
-                {
-                    if (!discovered)
-                    {
-                        player.discoveredTRex = true;
-                        discovered = true;
-                    }
-                    if (this.x > player.x)
-                    {
-                        facing = "LEFT";
-                        moveX = -speed;
-                        moveY = 0;
-                    }
-                    if (this.x < player.x)
-                    {
-                        facing = "RIGHT";
-                        moveX = speed;
-                        moveY = 0;
-                    }
-                    if (this.y > player.y)
-                    {
-                        facing = "TOP";
-                        moveX = 0;
-                        moveY = -speed;
-                    }
-                    if (this.y < player.y)
-                    {
-                        facing = "DOWN";
-                        moveX = 0;
-                        moveY = speed;
-                    }
-                }
+                facing = "RIGHT";
+                moveX = speed;
+                moveY = 0;
             }
-            if (Meatplaced)
+            if (this.y > player.y)
             {
-                if (HitAreaMeat(distance))
-                {
-                    if (this.x > MyMeat.x)
-                    {
-                        facing = "LEFT";
-                        moveX = -speed;
-                        moveY = 0;
-                    }
-                    if (this.x < MyMeat.x)
-                    {
-                        facing = "RIGHT";
-                        moveX = speed;
-                        moveY = 0;
-                    }
-                    if (this.y > MyMeat.y)
-                    {
-                        facing = "TOP";
-                        moveX = 0;
-                        moveY = -speed;
-                    }
-                    if (this.y < MyMeat.y)
-                    {
-                        facing = "DOWN";
-                        moveX = 0;
-                        moveY = speed;
-                    }
-                }
+                facing = "TOP";
+                moveX = 0;
+                moveY = -speed;
             }
-        } else raw = false;
-
+            if (this.y < player.y)
+            {
+                facing = "DOWN";
+                moveX = 0;
+                moveY = speed;
+            }
+        }
+        else walking = false;
         Collision collision = MoveUntilCollision(moveX, moveY);
         if (collision != null)
         {
@@ -259,27 +170,54 @@ public class TRex : AnimationSprite
     void HandleAnimation()
     {
         animationtimer++;
-        if (facing == "LEFT")
+        if (!stopOtherAnimation)
         {
-            Mirror(true, false);
-            SetCycle(1, 3);
-        }
-        if (facing == "RIGHT")
-        {
-            Mirror(false, false);
-            SetCycle(1, 3);
+            if (facing == "LEFT")
+            {
+                Mirror(true, false);
+                SetCycle(1, 4);
+            }
+
+            if (facing == "RIGHT")
+            {
+                Mirror(false, false);
+                SetCycle(1, 4);
+            }
+
+            if (facing == "TOP")
+            {
+                SetCycle(15, 3);
+            }
+
+            if (facing == "DOWN")
+            {
+                SetCycle(8, 4);
+            }
         }
 
-        if (facing == "TOP")
+        if (!walking & (facing == "LEFT" | facing == "RIGHT")) // Idle Animation
         {
-            SetCycle(5, 3);
-        }
-        if (facing == "DOWN")
-        {
-            SetCycle(9, 3);
+            stopOtherAnimation = true;
+            SetCycle(5, 2);
         }
 
-        if (animationtimer > 12)
+        if (!walking & facing == "TOP")// Idle Animation
+        {
+            stopOtherAnimation = true;
+            SetCycle(18, 2);
+        }
+
+        if (!walking & facing == "DOWN")// Idle Animation
+        {
+            stopOtherAnimation = true;
+            SetCycle(12, 2);
+        }
+        if (animationtimer > 12 & !stopOtherAnimation) //Walk Animation time
+        {
+            NextFrame();
+            animationtimer = 0;
+        }
+        if (animationtimer > 30 & stopOtherAnimation)//Idle Animation time
         {
             NextFrame();
             animationtimer = 0;
@@ -303,6 +241,6 @@ public class TRex : AnimationSprite
         Movement();
         Attack();
         HandleAnimation();
-        this.hugeMeat = player.hugeMeat;
     }
 }
+
