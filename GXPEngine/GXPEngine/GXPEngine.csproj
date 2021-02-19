@@ -36,18 +36,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigMeatObject.cs" />
     <Compile Include="Brachiosaurus.cs" />
     <Compile Include="Caveman.cs" />
     <Compile Include="Check.cs" />
     <Compile Include="DugHole.cs" />
     <Compile Include="EAAProjectile.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="EnemyBoss.cs" />
+    <Compile Include="Enemypack.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
     <Compile Include="HealthBar.cs" />
-    <Compile Include="HUDSmallMeat.cs" />
+    <Compile Include="HUDMeat.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LittleStone.cs" />
+    <Compile Include="MummyKiller.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />

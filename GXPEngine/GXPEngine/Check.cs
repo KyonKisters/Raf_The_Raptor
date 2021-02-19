@@ -47,7 +47,7 @@ public class Check : Sprite
 
         if (this.facing == "TOP")
         {
-            if (levelnumber==1)
+            if (levelnumber == 1)
             {
                 this.y -= 48;
             }
@@ -113,13 +113,19 @@ public class Check : Sprite
                 this.x -= 192;
             }
         }
-        Move(moveX,moveY);
-        Collision col = MoveUntilCollision(moveX,moveY);
+
+        Move(moveX, moveY);
+        Collision col = MoveUntilCollision(moveX, moveY);
+
         if (col != null)
         {
             player.cantDigAHole = true;
+            player.cantPlaceMeat = true;
         }
-        else player.cantDigAHole = false;
+        else {
+            player.cantDigAHole = false;
+            player.cantPlaceMeat = false;
+        } 
     }
     #endregion
 }

@@ -8,7 +8,9 @@ using GXPEngine;
 class PAAProjectile : Sprite
 {
     string facing;
-    float speed = 3;
+    public float speed = 3;
+    public int lifetime;
+    Level level;
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -16,7 +18,7 @@ class PAAProjectile : Sprite
     /// Constructor of the Projectile
     /// </summary>
     #region Constructor
-    public PAAProjectile(string facing, float x, float y) : base("PAAhitbox.png")
+    public PAAProjectile(string facing, float x, float y) : base("Rock.png")
     {
         SetOrigin(width / 2, height / 2);
         this.facing = facing;
@@ -42,6 +44,18 @@ class PAAProjectile : Sprite
     }
     #endregion
     //----------------------------------------------------------------------------------------
+    //                                        Instances
+    //----------------------------------------------------------------------------------------
+    /// <summary>
+    /// Instances of the Projectile
+    /// </summary>
+    #region Instances
+    public void creatLevel(Level level)
+    {
+        this.level = level;
+    }
+    #endregion
+    //----------------------------------------------------------------------------------------
     //                                        Movement
     //----------------------------------------------------------------------------------------
     /// <summary>
@@ -49,10 +63,14 @@ class PAAProjectile : Sprite
     /// </summary>
     #region Movement 
     void Movement()
-    {
+    { 
+        lifetime--;
         float moveX = 0;
         float moveY = 0;
-
+        if (lifetime <= 0)
+        {
+            LateDestroy();
+        }
         if (facing == "LEFT")
         {
             moveX -= speed;
@@ -97,7 +115,30 @@ class PAAProjectile : Sprite
             LateDestroy();
             if (newEnemy.life <= 0)
             {
+                level.enemyDefeatedCounter++;
                 col.other.LateDestroy();
+            }
+        }
+        if (col.other is EnemyBoss newEnemyBoss)
+        {
+            newEnemyBoss.life--;
+            LateDestroy();
+            if (newEnemyBoss.life <= 0)
+            {
+                level.enemyDefeatedCounter++;
+                col.other.LateDestroy();
+                level.LoadLevel();
+            }
+        }
+        if (col.other is MummyKiller mummyKiller)
+        {
+            mummyKiller.life--;
+            LateDestroy();
+            if (mummyKiller.life <= 0)
+            {
+                level.enemyDefeatedCounter++;
+                col.other.LateDestroy();
+                level.LoadLevel();
             }
         }
     }

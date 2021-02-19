@@ -25,6 +25,7 @@ public class MyGame : Game
     Sprite[] firstLevelCutscenes = new Sprite[4];
     Sprite[] secondLevelCutscenes = new Sprite[4];
     Sprite[] thirdLevelCutscenes = new Sprite[4];
+    Sprite[] fourthLevelCutscenes = new Sprite[2];
     //----------------------------------------------------------------------------------------
     //                                        Constructor
     //----------------------------------------------------------------------------------------
@@ -57,8 +58,8 @@ public class MyGame : Game
         {
             Game.main.GetChildren().ForEach(DestroyGame);
             delete = false;
+            this.delete = delete;
         }
-        this.delete = delete;
 
         if (levelnumber == 2)
         {
@@ -66,7 +67,7 @@ public class MyGame : Game
             {
                 secondLevelCutscenes[i] = new Sprite("Level2CutsceneNR" + i + ".png");
             }
-            if (Input.GetKey(Key.ENTER) & timer > 10)
+            if (Input.GetKey(Key.ENTER) & timer > 30)
             {
                 counter++;
                 timer = 0;
@@ -114,7 +115,7 @@ public class MyGame : Game
             {
                 thirdLevelCutscenes[i] = new Sprite("Level3CutsceneNR" + i + ".png");
             }
-            if (Input.GetKey(Key.ENTER) & timer > 10)
+            if (Input.GetKey(Key.ENTER) & timer > 30)
             {
                 counter++;
                 timer = 0;
@@ -154,7 +155,33 @@ public class MyGame : Game
                 level = new Level(filename, this, levelnumber);
                 AddChild(level);
             }
-
+        }
+        if (levelnumber == 4)
+        {
+            for (int i = 0; i <= 1; i++)
+            {
+                fourthLevelCutscenes[i] = new Sprite("Level4CutsceneNR" + i + ".png");
+            }
+            if (Input.GetKey(Key.ENTER) & timer > 30)
+            {
+                counter++;
+                timer = 0;
+            }
+            if (counter == 0 & gothrough == 1)
+            {
+                AddChild(fourthLevelCutscenes[0]);
+                gothrough++;
+            }
+            if (counter == 1 & gothrough == 2)
+            {
+                AddChild(fourthLevelCutscenes[1]);
+                fourthLevelCutscenes[0].LateDestroy();
+                gothrough++;
+            }
+            if (counter == 2 & gothrough == 3)
+            {
+                this.LateDestroy();
+            }
         }
         }
     #endregion
@@ -172,7 +199,7 @@ public class MyGame : Game
         {
             firstLevelCutscenes[i] = new Sprite("Level1CutsceneNR" + i +".png");
         }
-        if (Input.GetKey(Key.ENTER) & timer>10)
+        if (Input.GetKey(Key.ENTER) & timer>30)
         {
             counter++;
             timer = 0;
@@ -241,7 +268,6 @@ public class MyGame : Game
         {
             StartedGame = true;
             Startmenu.LateDestroy();
-
         }
         if (!firstCutscencesOver & StartedGame) StartGame();
 
